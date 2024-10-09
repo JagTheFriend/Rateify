@@ -51,7 +51,9 @@ export default function NavbarComponent() {
           </ul>
         </div>
         <div className="navbar-end">
-          <button className="btn">Login</button>
+          <Link href="/auth?t=login" className="btn">
+            Login
+          </Link>
         </div>
       </div>
     </section>
