@@ -1,7 +1,7 @@
 'use client'
 
 import { SignedOut } from '@clerk/nextjs'
-import LandingPage from './(unauthorized)/page'
+import LandingPage from './_unauthorized/page'
 
 export default function Page() {
   return (
