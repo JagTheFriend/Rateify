@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Footer from '~/components/footer'
+import Navbar from '../_components/Navbar'
 
 export const metadata: Metadata = {
   title: 'About Rateify',
@@ -12,7 +13,10 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <>
-      <main className="flex flex-col">{children}</main>
+      <main className="flex flex-col">
+        <Navbar />
+        {children}
+      </main>
       <Footer />
     </>
   )
