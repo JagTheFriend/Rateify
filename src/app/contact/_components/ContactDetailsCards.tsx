@@ -2,32 +2,20 @@
 import React from 'react'
 
 import { AnimatePresence, motion } from 'framer-motion'
+import Link from 'next/link'
 import { CanvasRevealEffect } from '~/components/ui/canvas-reveal-effect'
 
 export default function ContactDetailsCards() {
   return (
     <section>
       <div className="py-20 flex flex-col lg:flex-row items-center justify-center bg-white dark:bg-black w-full gap-4 mx-auto px-8">
-        <Card title="Sheetal is Nisha" icon={<AceternityIcon />}>
+        <Card title="Github" icon={<GithubIcon />}>
           <CanvasRevealEffect
             animationSpeed={5.1}
             containerClassName="bg-emerald-900"
           />
         </Card>
-        <Card title="Nisha is Munni" icon={<AceternityIcon />}>
-          <CanvasRevealEffect
-            animationSpeed={3}
-            containerClassName="bg-black"
-            colors={[
-              [236, 72, 153],
-              [232, 121, 249],
-            ]}
-            dotSize={2}
-          />
-          {/* Radial gradient for the cute fade */}
-          <div className="absolute inset-0 [mask-image:radial-gradient(400px_at_center,white,transparent)] bg-black/50 dark:bg-black/90" />
-        </Card>
-        <Card title="Munni is Aditi" icon={<AceternityIcon />}>
+        <Card title="Email" icon={<EmailIcon />}>
           <CanvasRevealEffect
             animationSpeed={3}
             containerClassName="bg-sky-600"
@@ -76,32 +64,55 @@ const Card = ({
         <div className="text-center group-hover/canvas-card:-translate-y-4 group-hover/canvas-card:opacity-0 transition duration-200 w-full  mx-auto flex items-center justify-center">
           {icon}
         </div>
-        <h2 className="dark:text-white text-xl opacity-0 group-hover/canvas-card:opacity-100 relative z-10 text-black mt-4  font-bold group-hover/canvas-card:text-white group-hover/canvas-card:-translate-y-2 transition duration-200">
+        <Link
+          href={
+            title === 'Github'
+              ? 'https://github.com/JagTheFriend'
+              : 'mailto:JagTheFriend12@gmail.com'
+          }
+          target="_blank"
+          className="dark:text-white text-xl opacity-0 group-hover/canvas-card:opacity-100 relative z-10 text-black mt-4  font-bold group-hover/canvas-card:text-white group-hover/canvas-card:-translate-y-2 transition duration-200"
+        >
           {title}
-        </h2>
+        </Link>
       </div>
     </div>
   )
 }
 
-const AceternityIcon = () => {
+const GithubIcon = () => {
   return (
     <svg
-      width="66"
-      height="65"
-      viewBox="0 0 66 65"
-      fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className="h-10 w-10 text-black dark:text-white group-hover/canvas-card:text-white "
+      width="65"
+      height="65"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="white"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
     >
-      <path
-        d="M8 8.05571C8 8.05571 54.9009 18.1782 57.8687 30.062C60.8365 41.9458 9.05432 57.4696 9.05432 57.4696"
-        stroke="currentColor"
-        strokeWidth="15"
-        strokeMiterlimit="3.86874"
-        strokeLinecap="round"
-        style={{ mixBlendMode: 'darken' }}
-      />
+      <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+    </svg>
+  )
+}
+
+const EmailIcon = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="65"
+      height="65"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="white"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+      <polyline points="22,6 12,13 2,6"></polyline>
     </svg>
   )
 }
