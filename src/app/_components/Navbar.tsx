@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 export default function NavbarComponent() {
   return (
-    <section>
+    <section className="sticky top-0 z-50 opacity-90">
       <div className="navbar bg-base-200">
         <div className="navbar-start">
           <div className="dropdown">
