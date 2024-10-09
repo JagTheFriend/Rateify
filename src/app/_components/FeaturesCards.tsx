@@ -22,7 +22,7 @@ const projects = [
 
 export default function FeaturesCards() {
   return (
-    <section id="features-section" className="max-w-5xl mx-auto px-8">
+    <section className="max-w-5xl mx-auto px-8">
       <HoverEffect items={projects} />
     </section>
   )
