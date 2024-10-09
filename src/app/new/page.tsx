@@ -1,3 +1,9 @@
+import FileInput from './_components/FileInput'
+
 export default function NewPostPage() {
-  return <>New Post</>
+  return (
+    <>
+      <FileInput />
+    </>
+  )
 }
