@@ -24,7 +24,7 @@ export const HoverEffect = ({
     >
       {items.map((item, idx) => (
         <Link
-          href={'#'}
+          href={`#+${Math.random()}`}
           key={`${Math.random()}`}
           className="relative group cursor-default block p-2 h-full w-full"
           onMouseEnter={() => setHoveredIndex(idx)}
