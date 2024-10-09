@@ -8,12 +8,14 @@ import SignUpSection from './_components/SignUp'
 
 export default function HomePage() {
   return (
-    <main className="flex flex-col">
-      <NavbarComponent />
-      <IntroSection />
-      <FeaturesCards />
-      <SignUpSection />
+    <>
+      <main className="flex flex-col">
+        <NavbarComponent />
+        <IntroSection />
+        <FeaturesCards />
+        <SignUpSection />
+      </main>
       <Footer />
-    </main>
+    </>
   )
 }
