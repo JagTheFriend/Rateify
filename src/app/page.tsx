@@ -1,23 +1,13 @@
 'use client'
 
 import { SignedOut } from '@clerk/nextjs'
-import Footer from '~/components/footer'
-import FeaturesCards from './_components/FeaturesCards'
-import IntroSection from './_components/Intro'
-import NavbarComponent from './_components/Navbar'
-import SignUpSection from './_components/SignUp'
+import LandingPage from './(unauthorized)/page'
 
-export default function HomePage() {
+export default function Page() {
   return (
     <>
       <SignedOut>
-        <main className="flex flex-col">
-          <NavbarComponent />
-          <IntroSection />
-          <FeaturesCards />
-          <SignUpSection />
-        </main>
-        <Footer />
+        <LandingPage />
       </SignedOut>
     </>
   )
