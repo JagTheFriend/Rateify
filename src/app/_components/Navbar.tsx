@@ -29,19 +29,21 @@ export default function NavbarComponent() {
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
             >
               <li>
-                <Link href="/about">About Us</Link>
+                <Link href="/about">About</Link>
               </li>
               <li>
                 <Link href="/contact">Contact</Link>
               </li>
             </ul>
           </div>
-          <p className="btn btn-ghost text-xl">Rateify</p>
+          <Link className="btn btn-ghost text-xl" href="/">
+            Rateify
+          </Link>
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">
             <li>
-              <Link href="/about">About Us</Link>
+              <Link href="/about">About</Link>
             </li>
             <li>
               <Link href="/contact">Contact</Link>
