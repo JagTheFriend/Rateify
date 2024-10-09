@@ -3,8 +3,8 @@ import Footer from '~/components/footer'
 import Navbar from '../_components/Navbar'
 
 export const metadata: Metadata = {
-  title: 'About Rateify',
-  description: 'About Rateify. Created by JagTheFriend',
+  title: 'Contact Developers of Rateify',
+  description: 'Contact Developers of Rateify. Created by JagTheFriend',
   icons: [{ rel: 'icon', url: '/favicon.ico' }],
 }
 
