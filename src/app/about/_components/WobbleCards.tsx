@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import { WobbleCard } from '~/components/ui/wobble-card'
 
 export default function WobbleCardComponent() {
@@ -6,7 +5,7 @@ export default function WobbleCardComponent() {
     <section className="px-4">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 max-w-7xl mx-auto w-full">
         <WobbleCard
-          containerClassName="col-span-1 lg:col-span-2 h-full bg-pink-800 min-h-[500px] lg:min-h-[300px]"
+          containerClassName="col-span-1 lg:col-span-2 bg-pink-800 min-h-[310px]"
           className=""
         >
           <div className="max-w-xs">
@@ -20,15 +19,8 @@ export default function WobbleCardComponent() {
               enhance their photography skills.
             </p>
           </div>
-          <Image
-            src="/linear.webp"
-            width={500}
-            height={500}
-            alt="linear demo image"
-            className="absolute -right-4 lg:-right-[40%] grayscale filter -bottom-10 object-contain rounded-2xl"
-          />
         </WobbleCard>
-        <WobbleCard containerClassName="col-span-1 min-h-[300px]">
+        <WobbleCard containerClassName="col-span-1 min-h-[340px]">
           <h2 className="max-w-80  text-left text-balance text-base md:text-xl lg:text-3xl font-semibold tracking-[-0.015em] text-white">
             Engaging Community
           </h2>
@@ -39,7 +31,7 @@ export default function WobbleCardComponent() {
             creativity.
           </p>
         </WobbleCard>
-        <WobbleCard containerClassName="col-span-1 lg:col-span-3 bg-blue-900 min-h-[500px] lg:min-h-[600px] xl:min-h-[300px]">
+        <WobbleCard containerClassName="col-span-1 lg:col-span-3 bg-blue-900 min-h-[330px]">
           <div className="max-w-sm">
             <h2 className="max-w-sm md:max-w-lg  text-left text-balance text-base md:text-xl lg:text-3xl font-semibold tracking-[-0.015em] text-white">
               Competitive Fun
@@ -51,13 +43,6 @@ export default function WobbleCardComponent() {
               competing for the top spot.
             </p>
           </div>
-          <Image
-            src="/linear.webp"
-            width={500}
-            height={500}
-            alt="linear demo image"
-            className="absolute -right-10 md:-right-[40%] lg:-right-[20%] -bottom-10 object-contain rounded-2xl"
-          />
         </WobbleCard>
       </div>
     </section>
