@@ -26,7 +26,7 @@ export const HoverEffect = ({
         <Link
           href={'#features-section'}
           key={`${Math.random()}`}
-          className="relative group  block p-2 h-full w-full"
+          className="relative group cursor-default block p-2 h-full w-full"
           onMouseEnter={() => setHoveredIndex(idx)}
           onMouseLeave={() => setHoveredIndex(null)}
         >
