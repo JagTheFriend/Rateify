@@ -1,3 +1,5 @@
+'use client'
+
 import { BackgroundLines } from '~/components/ui/background-lines'
 
 export default function IntroSection() {
