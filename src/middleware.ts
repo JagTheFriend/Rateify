@@ -1,6 +1,11 @@
-import { clerkMiddleware } from '@clerk/nextjs/server'
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 
-export default clerkMiddleware()
+const isPublicRoute = createRouteMatcher(['/', '/(contact|about)', '/auth(.*)'])
+
+export default clerkMiddleware((auth, req) => {
+  // Restrict dashboard routes to signed in users
+  if (!isPublicRoute(req)) auth().protect()
+})
 
 export const config = {
   matcher: [
