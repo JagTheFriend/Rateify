@@ -6,7 +6,7 @@ import IntroSection from './_components/Intro'
 import NavbarComponent from './_components/Navbar'
 import SignUpSection from './_components/SignUp'
 
-export default function LandingPage() {
+export default function LandingPageUnauthorized() {
   return (
     <>
       <main className="flex flex-col">
