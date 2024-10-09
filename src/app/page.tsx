@@ -1,5 +1,6 @@
 'use client'
 
+import Footer from '~/components/footer'
 import FeaturesCards from './_components/FeaturesCards'
 import IntroSection from './_components/Intro'
 import NavbarComponent from './_components/Navbar'
@@ -12,6 +13,7 @@ export default function HomePage() {
       <IntroSection />
       <FeaturesCards />
       <SignUpSection />
+      <Footer />
     </main>
   )
 }
