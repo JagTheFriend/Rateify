@@ -16,8 +16,6 @@ export default {
   },
   plugins: [daisyui, addVariablesForColors],
 
-  darkMode: 'class',
-
   // daisyUI config (optional - here are the default values)
   daisyui: {
     themes: ['black'], // false: only light + dark | true: all themes | array: specific themes like this ["light", "dark", "cupcake"]
