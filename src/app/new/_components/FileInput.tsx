@@ -53,7 +53,8 @@ export default function FileInput() {
                 )
                 return
               }
-              setUploadedFiles(files)
+              if (!files) return
+              setUploadedFiles(Array.from(files))
             }}
           />
         </label>

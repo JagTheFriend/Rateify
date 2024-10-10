@@ -1,13 +1,21 @@
 'use client'
 
-import { useAtomValue } from 'jotai'
+import { useAtom } from 'jotai'
 import { UploadedFiles } from './data'
 
-function DeleteButton() {
-  const uploadedFiles = useAtomValue(UploadedFiles)
+function DeleteButton({ currentIndex }: { currentIndex: number }) {
+  const [uploadedFiles, setUploadedFiles] = useAtom(UploadedFiles)
+
+  const removeImage = () => {
+    uploadedFiles.splice(currentIndex, 1)
+    setUploadedFiles([...uploadedFiles])
+  }
 
   return (
-    <button className="btn rounded-lg btn-error text-white">
+    <button
+      className="btn rounded-lg btn-error text-white"
+      onClick={() => removeImage()}
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="24"
@@ -57,7 +65,7 @@ export default function ActionButtons({
   return (
     <div className="flex flex-row gap-4 justify-center">
       <EditButton />
-      <DeleteButton />
+      <DeleteButton currentIndex={currentIndex} />
     </div>
   )
 }
