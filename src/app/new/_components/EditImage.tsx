@@ -17,7 +17,7 @@ export default function EditImage() {
       {uploadedFiles?.length && uploadedFiles.length >= 1 ? (
         <>
           <Carousel showArrows={true} onChange={(e) => setCurrentIndex(e)}>
-            {Array.from(uploadedFiles).map((file) => (
+            {uploadedFiles.map((file) => (
               <div key={Math.random()}>
                 <img src={URL.createObjectURL(file as File)} />
               </div>
