@@ -1,6 +1,7 @@
 'use client'
 
 import { useAtomValue } from 'jotai'
+import { toast } from 'sonner'
 import { newPost } from '~/server/actions'
 import { UploadedFiles } from './data'
 
@@ -12,7 +13,21 @@ function MetadataForm() {
         uploadedFiles.forEach((file) => {
           formData.append('image', file)
         })
-        await newPost(formData)
+        const { message, status } = await newPost(formData)
+
+        switch (status) {
+          case 200:
+            toast.success('Created new post!')
+            break
+
+          case 401:
+            toast.error('Unauthorized')
+            break
+
+          case 503:
+            toast.error('Server Error Occurred. Try again later')
+            break
+        }
       }}
     >
       <div className="flex flex-col gap-5">

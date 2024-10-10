@@ -5,7 +5,9 @@ import { getStorage, ref, uploadBytes } from 'firebase/storage'
 import { v4 as uuidv4 } from 'uuid'
 import { db, firebaseApp } from './db'
 
-export async function newPost(formData: FormData) {
+export async function newPost(
+  formData: FormData,
+): Promise<{ message: string; status: 401 | 200 | 503 }> {
   const currentUser = auth()
 
   if (!currentUser?.userId) {
@@ -36,6 +38,14 @@ export async function newPost(formData: FormData) {
     })
     return { message: 'Uploaded Images', status: 200 }
   } catch (error) {
-    return { message: 'Error Occur', status: 503 }
+    const errorMessage = (error as Error).message
+    if (
+      !errorMessage.startsWith(
+        "unhandledRejection: TypeError: Cannot read properties of undefined (reading 'path')",
+      )
+    ) {
+      return { message: 'Server Error', status: 503 }
+    }
+    return { message: 'Uploaded Images', status: 200 }
   }
 }
