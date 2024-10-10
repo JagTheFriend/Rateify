@@ -1,9 +1,12 @@
 'use client'
 
+import { useSetAtom } from 'jotai'
 import { toast } from 'sonner'
-import { MAXIMUM_NUMBER_OF_FILES } from './data'
+import { MAXIMUM_NUMBER_OF_FILES, UploadedFiles } from './data'
 
 export default function FileInput() {
+  const setUploadedFiles = useSetAtom(UploadedFiles)
+
   return (
     <section className="m-4">
       <div className="flex items-center justify-center w-full">
@@ -50,6 +53,7 @@ export default function FileInput() {
                 )
                 return
               }
+              setUploadedFiles(files)
             }}
           />
         </label>
