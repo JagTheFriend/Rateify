@@ -21,7 +21,7 @@ function MetadataForm() {
             break
 
           case 401:
-            toast.error('Unauthorized')
+            toast.warning('Unauthorized')
             break
 
           case 503:

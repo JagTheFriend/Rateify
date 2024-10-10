@@ -19,7 +19,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" className={`${GeistSans.variable}`}>
         <body>
-          <Toaster />
+          <Toaster richColors />
           {children}
         </body>
       </html>
