@@ -6,8 +6,6 @@ import { UploadedFiles } from './data'
 export default function FinalStep() {
   const uploadedFiles = useAtomValue(UploadedFiles)
 
-  //   if (!uploadedFiles.length === 0) return null
-
   return (
     <>
       <section className="flex justify-center mt-4">
@@ -19,7 +17,9 @@ export default function FinalStep() {
             <button
               disabled={uploadedFiles.length === 0}
               onClick={() =>
-                document.getElementById('post_details')!.showModal()
+                (
+                  document.getElementById('post_details') as HTMLDialogElement
+                ).showModal()
               }
               className={`px-8 py-2 rounded-md
                 ${
@@ -36,15 +36,34 @@ export default function FinalStep() {
       </section>
 
       <dialog id="post_details" className="modal">
-        <div className="modal-box">
+        <div className="modal-box w-full">
           <form method="dialog">
-            {/* if there is a button in form, it will close the modal */}
             <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
               ✕
             </button>
           </form>
-          <h3 className="font-bold text-lg">Hello!</h3>
-          <p className="py-4">Press ESC key or click on ✕ button to close</p>
+          <h3 className="font-bold text-lg mb-5">Details About This Post:</h3>
+          <div className="flex flex-col gap-5">
+            <label className="input input-bordered flex items-center gap-2">
+              Title
+              <input
+                type="text"
+                className="grow"
+                placeholder="Title of this post"
+              />
+            </label>
+            <label className="input input-bordered flex items-center gap-2">
+              Short Description
+              <input
+                type="text"
+                className="grow"
+                placeholder="Short Description of this post"
+              />
+            </label>
+          </div>
+          <div className="flex flex-row gap-5 justify-center mt-5">
+            <button className="btn btn-info rounded-lg">Post</button>
+          </div>
         </div>
       </dialog>
     </>
