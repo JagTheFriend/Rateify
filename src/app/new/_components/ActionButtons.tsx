@@ -1,7 +1,10 @@
 'use client'
 
 import { useAtom } from 'jotai'
+import { openEditor } from 'react-profile'
 import { UploadedFiles } from './data'
+
+import 'react-profile/themes/dark.min.css'
 
 function DeleteButton({ currentIndex }: { currentIndex: number }) {
   const [uploadedFiles, setUploadedFiles] = useAtom(UploadedFiles)
@@ -36,9 +39,22 @@ function DeleteButton({ currentIndex }: { currentIndex: number }) {
   )
 }
 
-function EditButton() {
+function EditButton({ currentIndex }: { currentIndex: number }) {
+  const [uploadedFiles, setUploadedFiles] = useAtom(UploadedFiles)
+
+  const openImageEditor = async () => {
+    const { cancel, done, editedImage } = await openEditor({
+      src: URL.createObjectURL(uploadedFiles[currentIndex] ?? new Blob()),
+    })
+
+    if (cancel || !done) return
+  }
+
   return (
-    <button className="btn rounded-lg btn-info">
+    <button
+      className="btn rounded-lg btn-info"
+      onClick={() => openImageEditor()}
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="24"
@@ -64,7 +80,7 @@ export default function ActionButtons({
 }: { currentIndex: number }) {
   return (
     <div className="flex flex-row gap-4 justify-center">
-      <EditButton />
+      <EditButton currentIndex={currentIndex} />
       <DeleteButton currentIndex={currentIndex} />
     </div>
   )
