@@ -1,6 +1,7 @@
 'use client'
 
 import { useAtomValue } from 'jotai'
+import { newPost } from '~/server/actions'
 import { UploadedFiles } from './data'
 
 export default function FinalStep() {
@@ -43,27 +44,42 @@ export default function FinalStep() {
             </button>
           </form>
           <h3 className="font-bold text-lg mb-5">Details About This Post:</h3>
-          <div className="flex flex-col gap-5">
-            <label className="input input-bordered flex items-center gap-2">
-              Title
-              <input
-                type="text"
-                className="grow"
-                placeholder="Title of this post"
-              />
-            </label>
-            <label className="input input-bordered flex items-center gap-2">
-              Short Description
-              <input
-                type="text"
-                className="grow"
-                placeholder="Short Description of this post"
-              />
-            </label>
-          </div>
-          <div className="flex flex-row gap-5 justify-center mt-5">
-            <button className="btn btn-info rounded-lg">Post</button>
-          </div>
+          <form
+            action={async (formData: FormData) => {
+              uploadedFiles.forEach((file) => {
+                formData.append('image', file)
+              })
+              await newPost(formData)
+            }}
+          >
+            <div className="flex flex-col gap-5">
+              <label className="input input-bordered flex items-center gap-2">
+                Title
+                <input
+                  required
+                  name="post-title"
+                  type="text"
+                  className="grow"
+                  placeholder="Title of this post"
+                />
+              </label>
+              <label className="input input-bordered flex items-center gap-2">
+                Short Description
+                <input
+                  required
+                  name="post-description"
+                  type="text"
+                  className="grow"
+                  placeholder="Short Description of this post"
+                />
+              </label>
+            </div>
+            <div className="flex flex-row gap-5 justify-center mt-5">
+              <button type="submit" className="btn btn-info rounded-lg">
+                Post
+              </button>
+            </div>
+          </form>
         </div>
       </dialog>
     </>
