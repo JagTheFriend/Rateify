@@ -4,6 +4,64 @@ import { useAtomValue } from 'jotai'
 import { newPost } from '~/server/actions'
 import { UploadedFiles } from './data'
 
+function MetadataForm() {
+  const uploadedFiles = useAtomValue(UploadedFiles)
+  return (
+    <form
+      action={async (formData: FormData) => {
+        uploadedFiles.forEach((file) => {
+          formData.append('image', file)
+        })
+        await newPost(formData)
+      }}
+    >
+      <div className="flex flex-col gap-5">
+        <label className="input input-bordered flex items-center gap-2">
+          Title
+          <input
+            required
+            name="post-title"
+            type="text"
+            className="grow"
+            placeholder="Title of this post"
+          />
+        </label>
+        <label className="input input-bordered flex items-center gap-2">
+          Short Description
+          <input
+            required
+            name="post-description"
+            type="text"
+            className="grow"
+            placeholder="Short Description of this post"
+          />
+        </label>
+      </div>
+      <div className="flex flex-row gap-5 justify-center mt-5">
+        <button type="submit" className="btn btn-info rounded-lg">
+          Post
+        </button>
+      </div>
+    </form>
+  )
+}
+
+function Dialog() {
+  return (
+    <dialog id="post_details" className="modal">
+      <div className="modal-box w-full">
+        <form method="dialog">
+          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+            ✕
+          </button>
+        </form>
+        <h3 className="font-bold text-lg mb-5">Details About This Post:</h3>
+        <MetadataForm />
+      </div>
+    </dialog>
+  )
+}
+
 export default function FinalStep() {
   const uploadedFiles = useAtomValue(UploadedFiles)
 
@@ -34,54 +92,8 @@ export default function FinalStep() {
             </button>
           </div>
         </div>
+        <Dialog />
       </section>
-
-      <dialog id="post_details" className="modal">
-        <div className="modal-box w-full">
-          <form method="dialog">
-            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-              ✕
-            </button>
-          </form>
-          <h3 className="font-bold text-lg mb-5">Details About This Post:</h3>
-          <form
-            action={async (formData: FormData) => {
-              uploadedFiles.forEach((file) => {
-                formData.append('image', file)
-              })
-              await newPost(formData)
-            }}
-          >
-            <div className="flex flex-col gap-5">
-              <label className="input input-bordered flex items-center gap-2">
-                Title
-                <input
-                  required
-                  name="post-title"
-                  type="text"
-                  className="grow"
-                  placeholder="Title of this post"
-                />
-              </label>
-              <label className="input input-bordered flex items-center gap-2">
-                Short Description
-                <input
-                  required
-                  name="post-description"
-                  type="text"
-                  className="grow"
-                  placeholder="Short Description of this post"
-                />
-              </label>
-            </div>
-            <div className="flex flex-row gap-5 justify-center mt-5">
-              <button type="submit" className="btn btn-info rounded-lg">
-                Post
-              </button>
-            </div>
-          </form>
-        </div>
-      </dialog>
     </>
   )
 }
