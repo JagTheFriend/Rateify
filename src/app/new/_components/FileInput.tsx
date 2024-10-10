@@ -1,8 +1,7 @@
 'use client'
 
-import { toast } from "sonner"
-
-const MAXIMUM_NUMBER_OF_FILES = 5
+import { toast } from 'sonner'
+import { MAXIMUM_NUMBER_OF_FILES } from './data'
 
 export default function FileInput() {
   return (
@@ -46,8 +45,10 @@ export default function FileInput() {
             onChange={(e) => {
               const files = e.target.files
               if (files && files.length > MAXIMUM_NUMBER_OF_FILES) {
-                toast.warning(`Too Many Images: Maximum ${MAXIMUM_NUMBER_OF_FILES} images allowed`)
-                return;
+                toast.warning(
+                  `Too Many Images: Maximum ${MAXIMUM_NUMBER_OF_FILES} images allowed`,
+                )
+                return
               }
             }}
           />
