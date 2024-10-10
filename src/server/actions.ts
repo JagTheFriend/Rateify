@@ -3,12 +3,12 @@
 import { auth } from '@clerk/nextjs/server'
 import { getStorage, ref, uploadBytes } from 'firebase/storage'
 import { v4 as uuidv4 } from 'uuid'
-import { firebaseApp } from './db'
+import { db, firebaseApp } from './db'
 
 export async function newPost(formData: FormData) {
   const currentUser = auth()
 
-  if (!currentUser) {
+  if (!currentUser?.userId) {
     return { message: 'Unauthenticated', status: 401 }
   }
 
@@ -25,6 +25,14 @@ export async function newPost(formData: FormData) {
     uploadData.imageFiles.forEach(async (file, index) => {
       const storageRef = ref(storage, `posts/${uploadData.postId}/${index}`)
       await uploadBytes(storageRef, file)
+    })
+    await db.post.create({
+      data: {
+        id: uploadData.postId,
+        description: uploadData.description,
+        title: uploadData.title,
+        authorId: currentUser.userId,
+      },
     })
     return { message: 'Uploaded Images', status: 200 }
   } catch (error) {
