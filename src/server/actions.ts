@@ -1,8 +1,9 @@
 'use server'
 
-import { auth } from '@clerk/nextjs/server'
+import { auth, clerkClient } from '@clerk/nextjs/server'
 import { getStorage, ref, uploadBytes } from 'firebase/storage'
 import { v4 as uuidv4 } from 'uuid'
+import { getUserDetail } from '~/lib/utils'
 import { db, firebaseApp } from './db'
 
 export async function newPost(
@@ -47,5 +48,17 @@ export async function newPost(
       return { message: 'Server Error', status: 503 }
     }
     return { message: uploadData.postId, status: 200 }
+  }
+}
+
+export async function getUserById(userId: string) {
+  try {
+    const user = await clerkClient.users.getUser(userId)
+    const details = getUserDetail(user)
+    return { details }
+  } catch (error) {
+    return {
+      error: true,
+    }
   }
 }
