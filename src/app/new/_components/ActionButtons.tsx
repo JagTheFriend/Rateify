@@ -48,6 +48,10 @@ function EditButton({ currentIndex }: { currentIndex: number }) {
     })
 
     if (cancel || !done) return
+
+    const file = new File([(await editedImage?.getBlob()) ?? ''], 'edited.png')
+    uploadedFiles[currentIndex] = file
+    setUploadedFiles([...uploadedFiles])
   }
 
   return (
