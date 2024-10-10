@@ -17,13 +17,13 @@ export default function EditImage() {
       {uploadedFiles?.length && uploadedFiles.length >= 1 ? (
         <>
           <Carousel showArrows={true} onChange={(e) => setCurrentIndex(e)}>
-            {Array.from(uploadedFiles).map((file, index) => (
-              <div key={index + Math.random()}>
+            {Array.from(uploadedFiles).map((file) => (
+              <div key={Math.random()}>
                 <img src={URL.createObjectURL(file as File)} />
               </div>
             ))}
           </Carousel>
-          <ActionButtons />
+          <ActionButtons currentIndex={currentIndex} />
         </>
       ) : (
         <div className="card bg-base-100 text-neutral-content">
