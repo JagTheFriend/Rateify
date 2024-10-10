@@ -11,10 +11,14 @@ datasource db {
 }
 
 model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    id          String   @id @default(cuid())
+    title       String
+    description String
+    authorId    String
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
 
-    @@index([name])
+    @@index([title])
+    @@index([title, description])
+    @@index([authorId, title, description])
 }
