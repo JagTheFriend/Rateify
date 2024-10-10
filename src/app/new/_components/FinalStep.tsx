@@ -1,12 +1,15 @@
 'use client'
 
 import { useAtomValue } from 'jotai'
+import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { newPost } from '~/server/actions'
 import { UploadedFiles } from './data'
 
 function MetadataForm() {
   const uploadedFiles = useAtomValue(UploadedFiles)
+  const { push } = useRouter()
+
   return (
     <form
       action={async (formData: FormData) => {
@@ -18,6 +21,7 @@ function MetadataForm() {
         switch (status) {
           case 200:
             toast.success('Created new post!')
+            push(`/view/${message}`)
             break
 
           case 401:

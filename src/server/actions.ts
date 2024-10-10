@@ -36,7 +36,7 @@ export async function newPost(
         authorId: currentUser.userId,
       },
     })
-    return { message: 'Uploaded Images', status: 200 }
+    return { message: uploadData.postId, status: 200 }
   } catch (error) {
     const errorMessage = (error as Error).message
     if (
@@ -46,6 +46,6 @@ export async function newPost(
     ) {
       return { message: 'Server Error', status: 503 }
     }
-    return { message: 'Uploaded Images', status: 200 }
+    return { message: uploadData.postId, status: 200 }
   }
 }
