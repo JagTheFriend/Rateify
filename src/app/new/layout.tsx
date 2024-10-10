@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Footer from '~/components/footer'
-import Navbar from '../_unauthorized/_components/Navbar'
+import Navbar from '../_authorized/_components/Navbar'
 
 export const metadata: Metadata = {
   title: 'Post a new image on Rateify',
