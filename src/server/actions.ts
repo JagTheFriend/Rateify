@@ -9,6 +9,11 @@ export async function newPost(formData: FormData) {
     return { message: 'Unauthenticated', status: 401 }
   }
 
-  console.log(`Title ${formData.get('post-title')}`)
+  const uploadData = {
+    title: formData.get('post-title') as string,
+    description: formData.get('post-description') as string,
+    imageFiles: formData.getAll('image') as File[],
+  }
+  console.log(uploadData)
   return ''
 }
