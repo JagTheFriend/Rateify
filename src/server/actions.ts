@@ -72,7 +72,7 @@ export async function getUserById(userId: string): Promise<{
   message: CustomUserType
 }> {
   try {
-    const user = await clerkClient.users.getUser(userId)
+    const user = await clerkClient().users.getUser(userId)
     const details = getUserDetail(user)
     return { status: 200, message: details }
   } catch (error) {
