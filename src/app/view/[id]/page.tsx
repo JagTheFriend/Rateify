@@ -2,6 +2,7 @@
 
 import { notFound } from 'next/navigation'
 import { getPostData, getUserById } from '~/server/actions'
+import Counters from './_components/DisplayCounters'
 import ImageCarousel from './_components/ImageCarousel'
 import UserProfile from './_components/UserProfile'
 
@@ -27,6 +28,11 @@ export default async function ViewPostContent({ params }: Props) {
     <div className="m-4">
       <UserProfile userData={authorData} />
       <ImageCarousel imageUrls={postData.imageUrls} />
+      <Counters
+        likeCounter={postData.likeCounter}
+        dislikeCounter={postData.dislikeCounter}
+        numberOfComments={999}
+      />
     </div>
   )
 }
