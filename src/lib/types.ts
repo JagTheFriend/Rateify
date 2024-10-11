@@ -1,3 +1,5 @@
+import type { Post } from '@prisma/client'
+
 export type CustomUserType = {
   id: string
   username: string
@@ -5,3 +7,5 @@ export type CustomUserType = {
   image: string
   dateJoined: number
 }
+
+export type ReturnTypeOfPost = Post & { imageUrls: string[] }
