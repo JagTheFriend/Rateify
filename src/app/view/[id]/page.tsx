@@ -32,7 +32,7 @@ export default async function ViewPostContent({ params }: Props) {
       <DisplayCounters
         likeCounter={formatNumber(postData.likeCounter)}
         dislikeCounter={formatNumber(postData.dislikeCounter)}
-        numberOfComments={formatNumber(postData.comments.length)}
+        numberOfComments={formatNumber(postData.commentCounter)}
       />
     </div>
   )
