@@ -1,9 +1,9 @@
 'use client'
 
 type Props = {
-  likeCounter: number
-  dislikeCounter: number
-  numberOfComments: number
+  likeCounter: string
+  dislikeCounter: string
+  numberOfComments: string
 }
 
 function LikeButton({ likeCounter }: Partial<Props>) {
