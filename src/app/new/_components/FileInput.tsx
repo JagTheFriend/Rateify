@@ -54,7 +54,13 @@ export default function FileInput() {
                 return
               }
               if (!files) return
-              setUploadedFiles(Array.from(files))
+              const fileArray = Array.from(files)
+              // 8 MB
+              if (fileArray.filter((file) => file.size > 8.389e6)) {
+                toast.error('Image cannot be bigger than 8 MB!')
+                return
+              }
+              setUploadedFiles(fileArray)
             }}
           />
         </label>

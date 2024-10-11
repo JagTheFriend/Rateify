@@ -26,6 +26,9 @@ export async function newPost(
 
   try {
     uploadData.imageFiles.forEach(async (file, index) => {
+      if (file.size > 8.389e6)
+        throw new Error('Image Cannot Be bigger than 8 MB')
+
       const storageRef = ref(storage, `posts/${uploadData.postId}/${index}`)
       await uploadBytes(storageRef, file)
     })
