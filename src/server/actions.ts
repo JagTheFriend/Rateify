@@ -3,7 +3,7 @@
 import { auth, clerkClient } from '@clerk/nextjs/server'
 import { getStorage, ref, uploadBytes } from 'firebase/storage'
 import { v4 as uuidv4 } from 'uuid'
-import type { ReturnTypeOfPost } from '~/lib/types'
+import type { CustomUserType, ReturnTypeOfPost } from '~/lib/types'
 import { getUserDetail } from '~/lib/utils'
 import { db, firebaseApp } from './db'
 
@@ -67,14 +67,18 @@ export async function newPost(
   }
 }
 
-export async function getUserById(userId: string) {
+export async function getUserById(userId: string): Promise<{
+  status: 404 | 200
+  message: CustomUserType
+}> {
   try {
     const user = await clerkClient.users.getUser(userId)
     const details = getUserDetail(user)
-    return { details }
+    return { status: 200, message: details }
   } catch (error) {
     return {
-      error: true,
+      status: 404,
+      message: {} as CustomUserType,
     }
   }
 }
