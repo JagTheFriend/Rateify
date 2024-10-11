@@ -1,14 +1,14 @@
 'use server'
 
 import { auth, clerkClient } from '@clerk/nextjs/server'
-import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage'
+import { getStorage, ref, uploadBytes } from 'firebase/storage'
 import { v4 as uuidv4 } from 'uuid'
 import { getUserDetail } from '~/lib/utils'
 import { db, firebaseApp } from './db'
 
 export async function newPost(
   formData: FormData,
-): Promise<{ message: string; status: 401 | 200 | 503 }> {
+): Promise<{ message: string; status: 401 | 200 | 503 | 507 }> {
   const currentUser = auth()
 
   if (!currentUser?.userId) {
@@ -22,13 +22,17 @@ export async function newPost(
     imageFiles: formData.getAll('image') as File[],
   }
 
+  if (uploadData.imageFiles.filter((file) => file.size > 8.389e6).length > 0) {
+    return {
+      message: 'Image too big',
+      status: 507,
+    }
+  }
+
   const storage = getStorage(firebaseApp)
 
   try {
     uploadData.imageFiles.forEach(async (file, index) => {
-      if (file.size > 8.389e6)
-        throw new Error('Image Cannot Be bigger than 8 MB')
-
       const storageRef = ref(storage, `posts/${uploadData.postId}/${index}`)
       await uploadBytes(storageRef, file, {
         contentType: file.type,
@@ -84,9 +88,7 @@ export async function getPostData(postId: string) {
 
   // Create a reference with an initial file path and name
   for (let index = 0; index < post.numberOfImages; index++) {
-    console.log('i', index)
-    const imagePathReference = ref(storage, `posts/${postId}/${index}`)
-    const imageUrl = await getDownloadURL(imagePathReference)
-    console.log('Image Url: ', imageUrl)
+    const imageUrl = `https://firebasestorage.googleapis.com/v0/b/rateify-17fc8.appspot.com/o/posts%2F${postId}%2F${index}?alt=media`
+    console.log(imageUrl)
   }
 }
