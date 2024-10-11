@@ -3,6 +3,7 @@
 import { auth, clerkClient } from '@clerk/nextjs/server'
 import { getStorage, ref, uploadBytes } from 'firebase/storage'
 import { v4 as uuidv4 } from 'uuid'
+import type { ReturnTypeOfPost } from '~/lib/types'
 import { getUserDetail } from '~/lib/utils'
 import { db, firebaseApp } from './db'
 
@@ -78,17 +79,26 @@ export async function getUserById(userId: string) {
   }
 }
 
-export async function getPostData(postId: string) {
+export async function getPostData(postId: string): Promise<{
+  message: ReturnTypeOfPost
+  status: 404 | 200
+}> {
   const post = await db.post.findUnique({ where: { id: postId } })
+
   if (!post) {
-    return { message: 'Post not found', status: 404 }
+    return { message: {} as ReturnTypeOfPost, status: 404 }
   }
 
-  const storage = getStorage(firebaseApp)
+  const returnData: ReturnTypeOfPost = { ...post, imageUrls: [] }
 
   // Create a reference with an initial file path and name
   for (let index = 0; index < post.numberOfImages; index++) {
     const imageUrl = `https://firebasestorage.googleapis.com/v0/b/rateify-17fc8.appspot.com/o/posts%2F${postId}%2F${index}?alt=media`
-    console.log(imageUrl)
+    returnData.imageUrls.push(imageUrl)
+  }
+
+  return {
+    message: returnData,
+    status: 200,
   }
 }
