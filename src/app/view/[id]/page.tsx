@@ -3,6 +3,7 @@
 import { notFound } from 'next/navigation'
 import { getPostData, getUserById } from '~/server/actions'
 import ImageCarousel from './_components/ImageCarousel'
+import UserProfile from './_components/UserProfile'
 
 type Props = {
   params: { id: string }
@@ -23,8 +24,9 @@ export default async function ViewPostContent({ params }: Props) {
   }
 
   return (
-    <>
+    <div className="m-4">
+      <UserProfile userData={authorData} />
       <ImageCarousel imageUrls={postData.imageUrls} />
-    </>
+    </div>
   )
 }
