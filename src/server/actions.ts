@@ -1,7 +1,7 @@
 'use server'
 
 import { auth, clerkClient } from '@clerk/nextjs/server'
-import { getStorage, ref, uploadBytes } from 'firebase/storage'
+import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage'
 import { v4 as uuidv4 } from 'uuid'
 import { getUserDetail } from '~/lib/utils'
 import { db, firebaseApp } from './db'
@@ -30,7 +30,14 @@ export async function newPost(
         throw new Error('Image Cannot Be bigger than 8 MB')
 
       const storageRef = ref(storage, `posts/${uploadData.postId}/${index}`)
-      await uploadBytes(storageRef, file)
+      await uploadBytes(storageRef, file, {
+        contentType: file.type,
+        customMetadata: {
+          postId: uploadData.postId,
+          name: file.name,
+          size: file.size.toString(),
+        },
+      })
     })
     await db.post.create({
       data: {
@@ -64,5 +71,22 @@ export async function getUserById(userId: string) {
     return {
       error: true,
     }
+  }
+}
+
+export async function getPostData(postId: string) {
+  const post = await db.post.findUnique({ where: { id: postId } })
+  if (!post) {
+    return { message: 'Post not found', status: 404 }
+  }
+
+  const storage = getStorage(firebaseApp)
+
+  // Create a reference with an initial file path and name
+  for (let index = 0; index < post.numberOfImages; index++) {
+    console.log('i', index)
+    const imagePathReference = ref(storage, `posts/${postId}/${index}`)
+    const imageUrl = await getDownloadURL(imagePathReference)
+    console.log('Image Url: ', imageUrl)
   }
 }
