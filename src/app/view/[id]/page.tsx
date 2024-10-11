@@ -11,7 +11,7 @@ type Props = {
 }
 
 export default async function ViewPostContent({ params }: Props) {
-  const { id: postId } = await params
+  const { id: postId } = params
   const { status: postStatus, message: postData } = await getPostData(postId)
   if (postStatus === 404) {
     return notFound()
