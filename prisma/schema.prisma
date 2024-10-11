@@ -10,6 +10,24 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+model Comment {
+    id       String @id @default(cuid())
+    content  String
+    authorId String
+
+    likeCounter Int @default(0)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    postId String
+    post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+    @@index([id, content])
+    @@index([id, authorId])
+    @@index([postId, id])
+}
+
 model Post {
     id             String @id @default(cuid())
     title          String
@@ -20,10 +38,11 @@ model Post {
     dislikeCounter Int    @default(0)
     authorId       String
 
+    comments Comment[]
+
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    @@index([title])
-    @@index([title, description])
-    @@index([authorId, title, description])
+    @@index([id])
+    @@index([authorId, id])
 }
