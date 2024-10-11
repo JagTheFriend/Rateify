@@ -6,7 +6,14 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css' // requires a loa
 export default function ImageCarousel({ imageUrls }: { imageUrls: string[] }) {
   return (
     <section>
-      <Carousel>
+      <Carousel
+        autoPlay
+        infiniteLoop
+        // dynamicHeight
+        showArrows={true}
+        showStatus={false}
+        showThumbs={false}
+      >
         {imageUrls.map((url) => (
           <div key={Math.random()}>
             <img src={url} />

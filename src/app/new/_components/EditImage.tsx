@@ -16,7 +16,11 @@ export default function EditImage() {
     <section className="mx-4">
       {uploadedFiles?.length && uploadedFiles.length >= 1 ? (
         <>
-          <Carousel showArrows={true} onChange={(e) => setCurrentIndex(e)}>
+          <Carousel
+            showArrows={true}
+            onChange={(e) => setCurrentIndex(e)}
+            dynamicHeight
+          >
             {uploadedFiles.map((file) => (
               <div key={Math.random()}>
                 <img src={URL.createObjectURL(file as File)} />
