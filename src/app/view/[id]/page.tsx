@@ -1,5 +1,6 @@
 'use server'
 
+import Error from 'next/error'
 import { getPostData } from '~/server/actions'
 
 type Props = {
@@ -8,6 +9,11 @@ type Props = {
 
 export default async function ViewPostContent({ params }: Props) {
   const { id: postId } = params
-  const postData = await getPostData(postId)
-  return <>{params.id}</>
+  const { status, message } = await getPostData(postId)
+
+  if (status === 404) {
+    return <Error statusCode={status} />
+  }
+
+  return <></>
 }
