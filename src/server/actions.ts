@@ -106,3 +106,39 @@ export async function getPostData(postId: string): Promise<{
     status: 200,
   }
 }
+
+export async function likeOrDislikePost(
+  type: 'like' | 'dislike',
+  postId: string,
+): Promise<{ message: string; status: 404 | 200 | 503 }> {
+  try {
+    const post = await db.post.findUnique({ where: { id: postId } })
+
+    if (!post) {
+      return { message: 'Post Not Found!', status: 404 }
+    }
+
+    if (type == 'like') {
+      await db.post.update({
+        where: {
+          id: postId,
+        },
+        data: {
+          likeCounter: post.likeCounter + 1,
+        },
+      })
+    } else {
+      await db.post.update({
+        where: {
+          id: postId,
+        },
+        data: {
+          dislikeCounter: post.dislikeCounter + 1,
+        },
+      })
+    }
+    return { message: 'Success', status: 200 }
+  } catch (error) {
+    return { message: 'Server Error', status: 503 }
+  }
+}
