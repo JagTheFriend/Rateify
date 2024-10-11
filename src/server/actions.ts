@@ -37,6 +37,7 @@ export async function newPost(
         id: uploadData.postId,
         description: uploadData.description,
         title: uploadData.title,
+        numberOfImages: uploadData.imageFiles.length,
         authorId: currentUser.userId,
       },
     })
