@@ -33,8 +33,12 @@ export async function newPost(
   const storage = getStorage(firebaseApp)
 
   try {
-    uploadData.imageFiles.forEach(async (file, index) => {
-      const storageRef = ref(storage, `posts/${uploadData.postId}/${index}`)
+    let index = 0
+    for (let file of uploadData.imageFiles) {
+      const storageRef = ref(
+        storage,
+        `posts/${uploadData.postId}/${uploadData.imageFiles[index]}`,
+      )
       await uploadBytes(storageRef, file, {
         contentType: file.type,
         customMetadata: {
@@ -43,7 +47,8 @@ export async function newPost(
           size: file.size.toString(),
         },
       })
-    })
+      index++
+    }
     await db.post.create({
       data: {
         id: uploadData.postId,
