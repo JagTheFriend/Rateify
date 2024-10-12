@@ -18,7 +18,7 @@ function LikeButton({ likeCounter, postId }: Partial<Props>) {
         const { status } = await likeOrDislikePost('like', postId ?? '')
 
         if (status === 200) {
-          toast.success('Post Disliked')
+          toast.success('Post Liked')
         }
 
         if (status === 503) {
@@ -102,8 +102,11 @@ function NumberOfComments({ numberOfComments }: Partial<Props>) {
 export default function DisplayCounters(propData: Props) {
   return (
     <section className="flex flex-row gap-4 mt-4">
-      <LikeButton likeCounter={propData.likeCounter} />
-      <DislikeButton dislikeCounter={propData.dislikeCounter} />
+      <LikeButton postId={propData.postId} likeCounter={propData.likeCounter} />
+      <DislikeButton
+        postId={propData.postId}
+        dislikeCounter={propData.dislikeCounter}
+      />
       <NumberOfComments numberOfComments={propData.numberOfComments} />
     </section>
   )
