@@ -18,19 +18,11 @@ function MetadataForm() {
         })
         const { message, status } = await newPost(formData)
 
-        switch (status) {
-          case 200:
-            toast.success('Created new post!')
-            push(`/view/${message}`)
-            break
-
-          case 401:
-            toast.warning('Unauthorized')
-            break
-
-          case 503:
-            toast.error('Server Error Occurred. Try again later')
-            break
+        if (status !== 200) {
+          toast.error('Server Error Occurred. Try again later')
+        } else {
+          toast.success('Created new post!')
+          push(`/view/${message}`)
         }
       }}
     >
