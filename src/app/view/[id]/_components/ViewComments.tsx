@@ -1,16 +1,25 @@
 'use client'
 
 import type { Comment } from '@prisma/client'
-import { useState } from 'react'
+import { useOptimistic, useState, useTransition } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { toast } from 'sonner'
 import type { CustomUserType } from '~/lib/types'
+import { formatNumber } from '~/lib/utils'
 import {
   getCommentsOfPost,
   likeOrDislikeComment,
 } from '~/server/comment-actions'
 
 function LikeButton({ comment }: { comment: Comment }) {
+  const [_isPending, startTransition] = useTransition()
+  const [optimisticLikeCounter, updateOptimisticLike] = useOptimistic(
+    comment.likeCounter,
+    (currentState: number, optimisticValue: number) => {
+      return currentState + optimisticValue
+    },
+  )
+
   return (
     <button
       className="flex flex-row gap-2"
@@ -18,6 +27,8 @@ function LikeButton({ comment }: { comment: Comment }) {
         const icon = document.getElementById(comment.id + 'likeIcon')
 
         if (icon?.getAttribute('fill') === 'red') {
+          startTransition(() => updateOptimisticLike(-1))
+
           const { status } = await likeOrDislikeComment(comment.id ?? '', true)
           if (status !== 200) {
             return toast.error(
@@ -29,6 +40,7 @@ function LikeButton({ comment }: { comment: Comment }) {
           return
         }
 
+        startTransition(() => updateOptimisticLike(1))
         const { status } = await likeOrDislikeComment(comment.id ?? '')
         if (status !== 200) {
           return toast.error('Server Error Occurred. Try again after sometime')
@@ -50,6 +62,7 @@ function LikeButton({ comment }: { comment: Comment }) {
       >
         <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
       </svg>
+      {formatNumber(optimisticLikeCounter)}
     </button>
   )
 }

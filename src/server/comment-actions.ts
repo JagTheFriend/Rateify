@@ -70,7 +70,7 @@ export async function likeOrDislikeComment(
         },
       })
     }
-    return { message: 'Liked Comment', status: 200 }
+    return { message: 'Success', status: 200 }
   } catch (error) {
     return {
       message: 'Server Error Occurred. Try again after sometime',
