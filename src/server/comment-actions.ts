@@ -1,6 +1,7 @@
 'use server'
 
 import { auth } from '@clerk/nextjs/server'
+import { revalidatePath } from 'next/cache'
 import { db } from './db'
 
 export async function postComment(formData: FormData) {
@@ -29,6 +30,7 @@ export async function postComment(formData: FormData) {
         },
       },
     })
+    revalidatePath(`/view/${postId}`)
     return { message: 'Comment Created', status: 200 }
   } catch (error) {
     return { message: 'Server Error Occurred. Try again later', status: 503 }
@@ -37,7 +39,7 @@ export async function postComment(formData: FormData) {
 
 export async function likeComment(commentId: string) {
   try {
-    await db.comment.update({
+    const { postId } = await db.comment.update({
       where: {
         id: commentId,
       },
@@ -47,6 +49,7 @@ export async function likeComment(commentId: string) {
         },
       },
     })
+    revalidatePath(`/view/${postId}`)
     return { message: 'Comment Liked', status: 200 }
   } catch (error) {
     return { message: 'Server Error Occurred. Try again later', status: 503 }
