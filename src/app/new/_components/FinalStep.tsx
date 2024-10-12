@@ -19,7 +19,7 @@ function MetadataForm() {
         const { message, status } = await newPost(formData)
 
         if (status !== 200) {
-          toast.error('Server Error Occurred. Try again later')
+          toast.error('Server Error Occurred. Try again after sometime')
         } else {
           toast.success('Created new post!')
           push(`/view/${message}`)

@@ -35,7 +35,10 @@ export async function postComment(formData: FormData) {
     revalidatePath(`/view/${postId}`)
     return { message: 'Comment Created', status: 200 }
   } catch (error) {
-    return { message: 'Server Error Occurred. Try again later', status: 503 }
+    return {
+      message: 'Server Error Occurred. Try again after sometime',
+      status: 503,
+    }
   }
 }
 
@@ -54,7 +57,10 @@ export async function likeComment(commentId: string) {
     revalidatePath(`/view/${postId}`)
     return { message: 'Liked Comment', status: 200 }
   } catch (error) {
-    return { message: 'Server Error Occurred. Try again later', status: 503 }
+    return {
+      message: 'Server Error Occurred. Try again after sometime',
+      status: 503,
+    }
   }
 }
 

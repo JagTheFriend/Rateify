@@ -35,7 +35,7 @@ function Comment({
           }
 
           if (status === 503) {
-            toast.error('Server Error Occurred. Try again later')
+            toast.error('Server Error Occurred. Try again after sometime')
           }
         }}
       >

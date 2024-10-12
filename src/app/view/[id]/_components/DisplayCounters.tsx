@@ -20,7 +20,9 @@ function LikeButton({ likeCounter, postId }: Partial<Props>) {
         if (icon?.getAttribute('fill') === 'dodgerblue') {
           const { status } = await likeOrDislikePost('like', postId ?? '', true)
           if (status !== 200) {
-            return toast.error('Server Error Occurred. Try again later')
+            return toast.error(
+              'Server Error Occurred. Try again after sometime',
+            )
           }
 
           icon.setAttribute('fill', 'none')
@@ -29,7 +31,7 @@ function LikeButton({ likeCounter, postId }: Partial<Props>) {
 
         const { status } = await likeOrDislikePost('like', postId ?? '')
         if (status !== 200) {
-          return toast.error('Server Error Occurred. Try again later')
+          return toast.error('Server Error Occurred. Try again after sometime')
         }
 
         icon?.setAttribute('fill', 'dodgerblue')
@@ -68,7 +70,9 @@ function DislikeButton({ dislikeCounter, postId }: Partial<Props>) {
             true,
           )
           if (status !== 200) {
-            return toast.error('Server Error Occurred. Try again later')
+            return toast.error(
+              'Server Error Occurred. Try again after sometime',
+            )
           }
 
           icon.setAttribute('fill', 'none')
@@ -77,7 +81,7 @@ function DislikeButton({ dislikeCounter, postId }: Partial<Props>) {
 
         const { status } = await likeOrDislikePost('dislike', postId ?? '')
         if (status !== 200) {
-          return toast.error('Server Error Occurred. Try again later')
+          return toast.error('Server Error Occurred. Try again after sometime')
         }
 
         icon?.setAttribute('fill', 'orangered')
