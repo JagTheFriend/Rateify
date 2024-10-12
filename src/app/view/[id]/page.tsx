@@ -29,8 +29,7 @@ export default async function ViewPostContent({ params }: Props) {
     return notFound()
   }
 
-  const { status: commentsStatus, message: commentData } =
-    await getCommentsOfPost(postId)
+  const { message: commentData } = await getCommentsOfPost(postId)
 
   return (
     <div className="m-4">

@@ -56,6 +56,16 @@ export async function likeComment(commentId: string) {
   }
 }
 
-export function getCommentsOfPost(postId: string) {
-  return {}
+export async function getCommentsOfPost(postId: string) {
+  const comments = await db.comment.findMany({
+    where: {
+      postId,
+    },
+    take: 10,
+    orderBy: {
+      createdAt: 'desc',
+    },
+  })
+
+  return { status: 2030, message: comments }
 }
