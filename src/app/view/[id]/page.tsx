@@ -35,6 +35,10 @@ export default async function ViewPostContent({ params }: Props) {
     <div className="m-4">
       <UserProfile userData={authorData} />
       <ImageCarousel imageUrls={postData.imageUrls} />
+      <section className="my-2">
+        <p className="text-lg">{postData.title}</p>
+        <p className="text-base">{postData.description}</p>
+      </section>
       <DisplayCounters
         likeCounter={formatNumber(postData.likeCounter)}
         dislikeCounter={formatNumber(postData.dislikeCounter)}
