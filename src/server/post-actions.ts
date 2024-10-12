@@ -109,7 +109,9 @@ export async function likeOrDislikePost(
           id: postId,
         },
         data: {
-          likeCounter: post.likeCounter + 1,
+          likeCounter: {
+            increment: 1,
+          },
         },
       })
     } else {
@@ -118,7 +120,9 @@ export async function likeOrDislikePost(
           id: postId,
         },
         data: {
-          dislikeCounter: post.dislikeCounter + 1,
+          dislikeCounter: {
+            increment: 1,
+          },
         },
       })
     }
