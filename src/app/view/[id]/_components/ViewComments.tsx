@@ -62,14 +62,16 @@ export default function ViewComments({
   comments,
 }: { comments: (Comment & { authorData: CustomUserType })[] }) {
   return (
-    <section className="mt-5 border-b-2 border-base-100 flex flex-col gap-2">
-      {comments.map((comment) => (
-        <Comment
-          comment={comment}
-          key={Math.random()}
-          authorDetail={comment.authorData}
-        />
-      ))}
+    <section className="mt-5 border-b-2 max-h-screen border-base-100 flex flex-col gap-2 relative">
+      <div className="overflow-auto no-scrollbar">
+        {comments.map((comment) => (
+          <Comment
+            comment={comment}
+            key={Math.random()}
+            authorDetail={comment.authorData}
+          />
+        ))}
+      </div>
     </section>
   )
 }
