@@ -11,10 +11,6 @@ export default function CommentBox({ postId }: { postId: string }) {
         action={async (formData) => {
           formData.append('postId', postId)
           const { status } = await postComment(formData)
-          if (status === 401) {
-            toast.error('Unauthenticated')
-            return
-          }
 
           if (status === 503) {
             toast.error('Server Error')
