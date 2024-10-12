@@ -2,9 +2,23 @@
 
 import { useAtomValue } from 'jotai'
 import { useRouter } from 'next/navigation'
+import { useFormStatus } from 'react-dom'
 import { toast } from 'sonner'
 import { newPost } from '~/server/post-actions'
 import { UploadedFiles } from './data'
+
+function PostButton() {
+  const { pending } = useFormStatus()
+  return (
+    <button
+      disabled={pending}
+      type="submit"
+      className="btn btn-info rounded-lg"
+    >
+      {!pending ? 'Post' : 'Loading...'}
+    </button>
+  )
+}
 
 function MetadataForm() {
   const uploadedFiles = useAtomValue(UploadedFiles)
@@ -49,9 +63,7 @@ function MetadataForm() {
         </label>
       </div>
       <div className="flex flex-row gap-5 justify-center mt-5">
-        <button type="submit" className="btn btn-info rounded-lg">
-          Post
-        </button>
+        <PostButton />
       </div>
     </form>
   )
