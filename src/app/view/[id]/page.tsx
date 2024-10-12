@@ -36,6 +36,7 @@ export default async function ViewPostContent({ params }: Props) {
         likeCounter={formatNumber(postData.likeCounter)}
         dislikeCounter={formatNumber(postData.dislikeCounter)}
         numberOfComments={formatNumber(postData.commentCounter)}
+        postId={postData.id}
       />
       <CommentBox postId={postData.id} />
       <ViewComments comments={postData.comments} />

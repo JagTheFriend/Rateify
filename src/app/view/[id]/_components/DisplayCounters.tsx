@@ -1,14 +1,31 @@
 'use client'
 
+import { toast } from 'sonner'
+import { likeOrDislikePost } from '~/server/post-actions'
+
 type Props = {
   likeCounter: string
   dislikeCounter: string
   numberOfComments: string
+  postId: string
 }
 
-function LikeButton({ likeCounter }: Partial<Props>) {
+function LikeButton({ likeCounter, postId }: Partial<Props>) {
   return (
-    <button className="shadow-[0_0_0_3px_#000000_inset] px-2 py-2 bg-transparent border border-white text-white rounded-lg transform hover:-translate-y-1 transition duration-400 flex flex-row gap-2 items-center">
+    <button
+      className="shadow-[0_0_0_3px_#000000_inset] px-2 py-2 bg-transparent border border-white text-white rounded-lg transform hover:-translate-y-1 transition duration-400 flex flex-row gap-2 items-center"
+      onClick={async () => {
+        const { status } = await likeOrDislikePost('like', postId ?? '')
+
+        if (status === 200) {
+          toast.success('Post Disliked')
+        }
+
+        if (status === 503) {
+          toast.error('Server Error Occurred. Try again later')
+        }
+      }}
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="24"
@@ -27,9 +44,22 @@ function LikeButton({ likeCounter }: Partial<Props>) {
   )
 }
 
-function DislikeButton({ dislikeCounter }: Partial<Props>) {
+function DislikeButton({ dislikeCounter, postId }: Partial<Props>) {
   return (
-    <button className="shadow-[0_0_0_3px_#000000_inset] px-2 py-2 bg-transparent border border-white text-white rounded-lg transform hover:-translate-y-1 transition duration-400 flex flex-row gap-2 items-center">
+    <button
+      className="shadow-[0_0_0_3px_#000000_inset] px-2 py-2 bg-transparent border border-white text-white rounded-lg transform hover:-translate-y-1 transition duration-400 flex flex-row gap-2 items-center"
+      onClick={async () => {
+        const { status } = await likeOrDislikePost('dislike', postId ?? '')
+
+        if (status === 200) {
+          toast.success('Post Disliked')
+        }
+
+        if (status === 503) {
+          toast.error('Server Error Occurred. Try again later')
+        }
+      }}
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="24"
