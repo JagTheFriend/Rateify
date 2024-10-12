@@ -3,6 +3,7 @@
 import { useRef } from 'react'
 import { useFormStatus } from 'react-dom'
 import { toast } from 'sonner'
+import LoadingSpinner from '~/components/loading'
 import { postComment } from '~/server/comment-actions'
 
 function SendButton() {
@@ -25,7 +26,7 @@ function SendButton() {
           <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
         </svg>
       ) : (
-        'Loading...'
+        <LoadingSpinner />
       )}
     </button>
   )

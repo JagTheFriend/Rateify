@@ -4,6 +4,7 @@ import { useAtomValue } from 'jotai'
 import { useRouter } from 'next/navigation'
 import { useFormStatus } from 'react-dom'
 import { toast } from 'sonner'
+import LoadingSpinner from '~/components/loading'
 import { newPost } from '~/server/post-actions'
 import { UploadedFiles } from './data'
 
@@ -15,7 +16,7 @@ function PostButton() {
       type="submit"
       className="btn btn-info rounded-lg"
     >
-      {!pending ? 'Post' : 'Loading...'}
+      {!pending ? 'Post' : <LoadingSpinner />}
     </button>
   )
 }
