@@ -1,5 +1,6 @@
 'use client'
 
+import { useRef } from 'react'
 import { toast } from 'sonner'
 import { likeOrDislikePost } from '~/server/post-actions'
 
@@ -13,20 +14,21 @@ type Props = {
 function LikeButton({ likeCounter, postId }: Partial<Props>) {
   return (
     <button
-      className="shadow-[0_0_0_3px_#000000_inset] px-2 py-2 bg-transparent border border-white text-white rounded-lg transform hover:-translate-y-1 transition duration-400 flex flex-row gap-2 items-center"
+      className="shadow-[0_0_0_3px_#000000_inset] px-2 py-2 bg-transparent border border-gray-500 text-white rounded-lg transform hover:-translate-y-1 transition duration-400 flex flex-row gap-2 items-center"
       onClick={async () => {
         const { status } = await likeOrDislikePost('like', postId ?? '')
 
-        if (status === 200) {
-          toast.success('Post Liked')
+        if (status !== 200) {
+          return toast.error('Server Error Occurred. Try again later')
         }
 
-        if (status === 503) {
-          toast.error('Server Error Occurred. Try again later')
-        }
+        document
+          .getElementById(postId + 'likeIcon')
+          ?.setAttribute('fill', 'dodgerblue')
       }}
     >
       <svg
+        id={postId + 'likeIcon'}
         xmlns="http://www.w3.org/2000/svg"
         width="24"
         height="24"
@@ -45,22 +47,24 @@ function LikeButton({ likeCounter, postId }: Partial<Props>) {
 }
 
 function DislikeButton({ dislikeCounter, postId }: Partial<Props>) {
+  const iconRef = useRef()
+
   return (
     <button
-      className="shadow-[0_0_0_3px_#000000_inset] px-2 py-2 bg-transparent border border-white text-white rounded-lg transform hover:-translate-y-1 transition duration-400 flex flex-row gap-2 items-center"
+      className="shadow-[0_0_0_3px_#000000_inset] px-2 py-2 bg-transparent border border-gray-500 text-white rounded-lg transform hover:-translate-y-1 transition duration-400 flex flex-row gap-2 items-center"
       onClick={async () => {
         const { status } = await likeOrDislikePost('dislike', postId ?? '')
-
-        if (status === 200) {
-          toast.success('Post Disliked')
+        if (status !== 200) {
+          return toast.error('Server Error Occurred. Try again later')
         }
 
-        if (status === 503) {
-          toast.error('Server Error Occurred. Try again later')
-        }
+        document
+          .getElementById(postId + 'dislikeIcon')
+          ?.setAttribute('fill', 'orangered')
       }}
     >
       <svg
+        id={postId + 'dislikeIcon'}
         xmlns="http://www.w3.org/2000/svg"
         width="24"
         height="24"
@@ -80,7 +84,7 @@ function DislikeButton({ dislikeCounter, postId }: Partial<Props>) {
 
 function NumberOfComments({ numberOfComments }: Partial<Props>) {
   return (
-    <button className="shadow-[0_0_0_3px_#000000_inset] px-2 py-2 bg-transparent border border-white text-white rounded-lg transform hover:-translate-y-1 transition duration-400 flex flex-row gap-2 items-center">
+    <button className="shadow-[0_0_0_3px_#000000_inset] px-2 py-2 bg-transparent border border-gray-500 text-white rounded-lg transform hover:-translate-y-1 transition duration-400 flex flex-row gap-2 items-center">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="24"
