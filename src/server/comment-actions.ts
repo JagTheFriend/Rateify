@@ -13,11 +13,20 @@ export async function postComment(formData: FormData) {
   }
 
   try {
-    await db.comment.create({
+    await db.post.update({
+      where: {
+        id: postId,
+      },
       data: {
-        authorId,
-        content: comment,
-        postId: postId,
+        commentCounter: {
+          increment: 1,
+        },
+        comments: {
+          create: {
+            authorId,
+            content: comment,
+          },
+        },
       },
     })
     return { message: 'Comment Created', status: 200 }
