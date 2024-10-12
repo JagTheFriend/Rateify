@@ -1,8 +1,35 @@
 'use client'
 
 import { useRef } from 'react'
+import { useFormStatus } from 'react-dom'
 import { toast } from 'sonner'
 import { postComment } from '~/server/comment-actions'
+
+function SendButton() {
+  const { pending } = useFormStatus()
+  return (
+    <button disabled={pending} className="btn btn-ghost" type="submit">
+      {!pending ? (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="white"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <line x1="22" y1="2" x2="11" y2="13"></line>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+        </svg>
+      ) : (
+        'Loading...'
+      )}
+    </button>
+  )
+}
 
 export default function CommentInputBox({ postId }: { postId: string }) {
   const formRef = useRef<HTMLFormElement>(null)
@@ -34,22 +61,7 @@ export default function CommentInputBox({ postId }: { postId: string }) {
           className="input input-bordered w-full max-w-xs"
           required
         />
-        <button className="btn btn-ghost" type="submit">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="white"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <line x1="22" y1="2" x2="11" y2="13"></line>
-            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-          </svg>
-        </button>
+        <SendButton />
       </form>
     </section>
   )
