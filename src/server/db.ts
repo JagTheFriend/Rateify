@@ -27,7 +27,7 @@ const firebaseConfig = {
 }
 
 // Initialize Firebase
-export const firebaseApp =
-  globalVariable.firebaseApp ?? initializeApp(firebaseConfig)
+export const firebaseApp = initializeApp(firebaseConfig)
+// globalVariable.firebaseApp ?? initializeApp(firebaseConfig)
 
-if (env.NODE_ENV !== 'production') globalVariable.firebaseApp = firebaseApp
+// if (env.NODE_ENV !== 'production') globalVariable.firebaseApp = firebaseApp
