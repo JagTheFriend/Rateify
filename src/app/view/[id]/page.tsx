@@ -8,6 +8,7 @@ import CommentBox from './_components/CommentBox'
 import DisplayCounters from './_components/DisplayCounters'
 import ImageCarousel from './_components/ImageCarousel'
 import UserProfile from './_components/UserProfile'
+import ViewComments from './_components/ViewComments'
 
 type Props = {
   params: { id: string }
@@ -37,6 +38,7 @@ export default async function ViewPostContent({ params }: Props) {
         numberOfComments={formatNumber(postData.commentCounter)}
       />
       <CommentBox postId={postData.id} />
+      <ViewComments comments={postData.comments} />
     </div>
   )
 }
