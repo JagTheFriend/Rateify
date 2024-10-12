@@ -1,7 +1,9 @@
 'use client'
 
 import type { Comment } from '@prisma/client'
+import { toast } from 'sonner'
 import { formatNumber } from '~/lib/utils'
+import { likeComment } from '~/server/comment-actions'
 
 function Comment({ comment }: { comment: Comment }) {
   return (
@@ -17,7 +19,19 @@ function Comment({ comment }: { comment: Comment }) {
           {comment.content}
         </div>
       </div>
-      <div className="flex flex-row gap-2">
+      <button
+        className="flex flex-row gap-2"
+        onClick={async () => {
+          const { status } = await likeComment(comment.id)
+          if (status === 200) {
+            toast.success('Comment Liked')
+          }
+
+          if (status === 503) {
+            toast.error('Server Error Occurred. Try again later')
+          }
+        }}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -32,7 +46,7 @@ function Comment({ comment }: { comment: Comment }) {
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
         </svg>
         {formatNumber(comment.likeCounter)}
-      </div>
+      </button>
     </div>
   )
 }

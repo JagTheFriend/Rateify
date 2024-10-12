@@ -34,3 +34,21 @@ export async function postComment(formData: FormData) {
     return { message: 'Server Error Occurred. Try again later', status: 503 }
   }
 }
+
+export async function likeComment(commentId: string) {
+  try {
+    await db.comment.update({
+      where: {
+        id: commentId,
+      },
+      data: {
+        likeCounter: {
+          increment: 1,
+        },
+      },
+    })
+    return { message: 'Comment Liked', status: 200 }
+  } catch (error) {
+    return { message: 'Server Error Occurred. Try again later', status: 503 }
+  }
+}
