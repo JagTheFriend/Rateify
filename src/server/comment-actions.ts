@@ -2,6 +2,7 @@
 
 import { auth, clerkClient } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
+import type { CustomUserType } from '~/lib/types'
 import { getUserDetail } from '~/lib/utils'
 import { db } from './db'
 
@@ -77,7 +78,15 @@ export async function getCommentsOfPost(postId: string) {
 
   const finalData = comments.map((comment) => ({
     ...comment,
-    authorData: userData.filter((user) => user.id === comment.authorId)[0],
+    authorData:
+      userData.filter((user) => user.id === comment.authorId)[0] ??
+      ({
+        id: 'DELETE_USER',
+        dateJoined: 2,
+        email: 'unknown@example.com',
+        image: '',
+        username: 'Unknown',
+      } as CustomUserType),
   }))
 
   return { status: 2030, message: finalData }

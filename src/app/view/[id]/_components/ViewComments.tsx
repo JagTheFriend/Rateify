@@ -9,20 +9,20 @@ import { likeComment } from '~/server/comment-actions'
 function Comment({
   comment,
   authorDetail,
-}: { comment: Comment; authorDetail: CustomUserType | undefined }) {
+}: { comment: Comment; authorDetail: CustomUserType }) {
   return (
     <div className="flex flex-row items-center justify-between">
       <div className="flex flex-row gap-2">
         <div className="avatar">
           <div className="w-11 rounded-full">
             <img
-              src={authorDetail?.image}
-              alt={`${authorDetail?.username}'s profile image`}
+              src={authorDetail.image}
+              alt={`${authorDetail.username}'s profile image`}
             />
           </div>
         </div>
         <div className="flex flex-col">
-          <p className="font-bold">{authorDetail?.username}</p>
+          <p className="font-bold">{authorDetail.username}</p>
           {comment.content}
         </div>
       </div>
@@ -60,7 +60,7 @@ function Comment({
 
 export default function ViewComments({
   comments,
-}: { comments: (Comment & { authorData: CustomUserType | undefined })[] }) {
+}: { comments: (Comment & { authorData: CustomUserType })[] }) {
   return (
     <section className="mt-5 border-b-2 border-base-100 flex flex-col gap-2">
       {comments.map((comment) => (
