@@ -1,3 +1,5 @@
+'use client'
+
 import type { Comment } from '@prisma/client'
 import { formatNumber } from '~/lib/utils'
 
