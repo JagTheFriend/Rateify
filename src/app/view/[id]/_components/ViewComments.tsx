@@ -1,7 +1,9 @@
 'use client'
 
 import type { Comment } from '@prisma/client'
+import InfiniteScroll from 'react-infinite-scroll-component'
 import { toast } from 'sonner'
+import LoadingSpinner from '~/components/loading'
 import type { CustomUserType } from '~/lib/types'
 import { formatNumber } from '~/lib/utils'
 import { likeComment } from '~/server/comment-actions'
@@ -63,14 +65,33 @@ export default function ViewComments({
 }: { comments: (Comment & { authorData: CustomUserType })[] }) {
   return (
     <section className="mt-5 border-b-2 max-h-screen border-base-100 flex flex-col gap-2 relative">
-      <div className="overflow-auto no-scrollbar">
-        {comments.map((comment) => (
-          <Comment
-            comment={comment}
-            key={Math.random()}
-            authorDetail={comment.authorData}
-          />
-        ))}
+      <div className="overflow-auto">
+        <InfiniteScroll
+          className="no-scrollbar"
+          dataLength={comments.length} //This is important field to render the next data
+          next={() => {
+            console.log('Next Data')
+          }}
+          hasMore={true}
+          loader={
+            <div className="flex justify-center">
+              <LoadingSpinner />
+            </div>
+          }
+          endMessage={
+            <p style={{ textAlign: 'center' }}>
+              <b>Yay! You have seen it all</b>
+            </p>
+          }
+        >
+          {comments.map((comment) => (
+            <Comment
+              comment={comment}
+              key={Math.random()}
+              authorDetail={comment.authorData}
+            />
+          ))}
+        </InfiniteScroll>
       </div>
     </section>
   )
