@@ -34,7 +34,7 @@ function Comment({
             toast.success('Comment Liked')
           }
 
-          if (status === 503) {
+          if (status !== 200) {
             toast.error('Server Error Occurred. Try again after sometime')
           }
         }}
