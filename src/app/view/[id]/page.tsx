@@ -3,6 +3,7 @@
 import { notFound } from 'next/navigation'
 import { formatNumber } from '~/lib/utils'
 import { getPostData, getUserById } from '~/server/actions'
+import CommentBox from './_components/CcommentBox'
 import DisplayCounters from './_components/DisplayCounters'
 import ImageCarousel from './_components/ImageCarousel'
 import UserProfile from './_components/UserProfile'
@@ -34,6 +35,7 @@ export default async function ViewPostContent({ params }: Props) {
         dislikeCounter={formatNumber(postData.dislikeCounter)}
         numberOfComments={formatNumber(postData.commentCounter)}
       />
+      <CommentBox />
     </div>
   )
 }
