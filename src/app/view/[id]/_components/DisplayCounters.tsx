@@ -1,16 +1,26 @@
 'use client'
 
+import { useOptimistic, useTransition } from 'react'
 import { toast } from 'sonner'
 import { likeOrDislikePost } from '~/server/post-actions'
 
 type Props = {
-  likeCounter: string
-  dislikeCounter: string
-  numberOfComments: string
+  likeCounter: number
+  dislikeCounter: number
+  numberOfComments: number
   postId: string
 }
 
 function LikeButton({ likeCounter, postId }: Partial<Props>) {
+  const [isPending, startTransition] = useTransition()
+  const [optimisticLikeCounter, updateOptimisticLike] = useOptimistic(
+    likeCounter ?? 0,
+    (currentState: number, optimisticValue: number) => {
+      console.log(currentState, optimisticValue)
+      return currentState + optimisticValue
+    },
+  )
+
   return (
     <button
       className="shadow-[0_0_0_3px_#000000_inset] px-2 py-2 bg-transparent border border-gray-500 text-white rounded-lg transform hover:-translate-y-1 transition duration-400 flex flex-row gap-2 items-center"
@@ -18,6 +28,7 @@ function LikeButton({ likeCounter, postId }: Partial<Props>) {
         const icon = document.getElementById(postId + 'likeIcon')
 
         if (icon?.getAttribute('fill') === 'dodgerblue') {
+          startTransition(() => updateOptimisticLike(-1))
           const { status } = await likeOrDislikePost('like', postId ?? '', true)
           if (status !== 200) {
             return toast.error(
@@ -29,11 +40,11 @@ function LikeButton({ likeCounter, postId }: Partial<Props>) {
           return
         }
 
+        startTransition(() => updateOptimisticLike(1))
         const { status } = await likeOrDislikePost('like', postId ?? '')
         if (status !== 200) {
           return toast.error('Server Error Occurred. Try again after sometime')
         }
-
         icon?.setAttribute('fill', 'dodgerblue')
       }}
     >
@@ -51,7 +62,7 @@ function LikeButton({ likeCounter, postId }: Partial<Props>) {
       >
         <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path>
       </svg>
-      {likeCounter}
+      {optimisticLikeCounter}
     </button>
   )
 }
