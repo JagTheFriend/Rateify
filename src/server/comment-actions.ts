@@ -64,16 +64,35 @@ export async function likeComment(commentId: string) {
   }
 }
 
-export async function getCommentsOfPost(postId: string) {
-  const comments = await db.comment.findMany({
-    where: {
-      postId,
-    },
-    take: 10,
-    orderBy: {
-      createdAt: 'desc',
-    },
-  })
+export async function getCommentsOfPost(
+  postId: string,
+  currentCursor?: string,
+) {
+  let comments
+  if (currentCursor) {
+    comments = await db.comment.findMany({
+      where: {
+        postId,
+      },
+      take: 10,
+      cursor: {
+        id: currentCursor,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    })
+  } else {
+    comments = await db.comment.findMany({
+      where: {
+        postId,
+      },
+      take: 10,
+      orderBy: {
+        createdAt: 'desc',
+      },
+    })
+  }
 
   const commentAuthors = await clerkClient().users.getUserList({
     userId: comments.map((comment) => comment.authorId),

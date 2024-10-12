@@ -45,7 +45,7 @@ export default async function ViewPostContent({ params }: Props) {
         postId={postData.id}
       />
       <CommentInputBox postId={postData.id} />
-      <ViewComments comments={commentData} />
+      <ViewComments initialComments={commentData} />
     </div>
   )
 }

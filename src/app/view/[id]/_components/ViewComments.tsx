@@ -1,12 +1,12 @@
 'use client'
 
 import type { Comment } from '@prisma/client'
+import { useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { toast } from 'sonner'
-import LoadingSpinner from '~/components/loading'
 import type { CustomUserType } from '~/lib/types'
 import { formatNumber } from '~/lib/utils'
-import { likeComment } from '~/server/comment-actions'
+import { getCommentsOfPost, likeComment } from '~/server/comment-actions'
 
 function Comment({
   comment,
@@ -61,27 +61,39 @@ function Comment({
 }
 
 export default function ViewComments({
-  comments,
-}: { comments: (Comment & { authorData: CustomUserType })[] }) {
+  initialComments,
+}: { initialComments: (Comment & { authorData: CustomUserType })[] }) {
+  const [comments, setComments] = useState(initialComments)
+  const [hasMore, setHasMore] = useState(true)
+
   return (
     <section className="mt-5 border-b-2 max-h-screen border-base-100 flex flex-col gap-2 relative">
       <div className="overflow-auto">
         <InfiniteScroll
           className="no-scrollbar flex flex-col gap-2"
           dataLength={comments.length} //This is important field to render the next data
-          next={() => {
-            console.log('Next Data')
+          next={async () => {
+            const cursor = comments[comments.length - 1]?.id
+            const { status, message } = await getCommentsOfPost(
+              comments[comments.length - 1]?.postId ?? '',
+              cursor,
+            )
+
+            if (status !== 200) {
+              setHasMore(false)
+              toast.error('Unable to fetch more comments')
+            }
+            setComments([...comments, ...message])
           }}
-          hasMore={true}
+          hasMore={hasMore}
           loader={
-            <div className="flex justify-center">
-              <LoadingSpinner />
+            <div className="flex items-center gap-4">
+              <div className="skeleton h-11 w-11 shrink-0 rounded-full"></div>
+              <div className="flex flex-col gap-4">
+                <div className="skeleton h-4 w-20"></div>
+                <div className="skeleton h-3 w-28"></div>
+              </div>
             </div>
-          }
-          endMessage={
-            <p style={{ textAlign: 'center' }}>
-              <b>Yay! You have seen it all</b>
-            </p>
           }
         >
           {comments.map((comment) => (
