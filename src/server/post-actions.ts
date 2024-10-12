@@ -77,12 +77,7 @@ export async function getPostData(postId: string): Promise<{
     return { message: {} as ReturnTypeOfPost, status: 404 }
   }
 
-  // TODO: Implement pagination
-  const comments = await db.comment.findMany({
-    where: { postId },
-    orderBy: { createdAt: 'desc' },
-  })
-  const returnData: ReturnTypeOfPost = { ...post, comments, imageUrls: [] }
+  const returnData: ReturnTypeOfPost = { ...post, imageUrls: [] }
 
   // Create a reference with an initial file path and name
   for (let index = 0; index < post.numberOfImages; index++) {

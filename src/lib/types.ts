@@ -1,4 +1,4 @@
-import type { Comment, Post } from '@prisma/client'
+import type { Post } from '@prisma/client'
 
 export type CustomUserType = {
   id: string
@@ -9,6 +9,5 @@ export type CustomUserType = {
 }
 
 export type ReturnTypeOfPost = Post & {
-  comments: Comment[]
   imageUrls: string[]
 }

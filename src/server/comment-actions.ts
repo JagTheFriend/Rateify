@@ -55,3 +55,7 @@ export async function likeComment(commentId: string) {
     return { message: 'Server Error Occurred. Try again later', status: 503 }
   }
 }
+
+export function getCommentsOfPost(postId: string) {
+  return {}
+}

@@ -2,6 +2,7 @@
 
 import { notFound } from 'next/navigation'
 import { formatNumber } from '~/lib/utils'
+import { getCommentsOfPost } from '~/server/comment-actions'
 import { getUserById } from '~/server/general-actions'
 import { getPostData } from '~/server/post-actions'
 import CommentBox from './_components/CommentBox'
@@ -28,6 +29,9 @@ export default async function ViewPostContent({ params }: Props) {
     return notFound()
   }
 
+  const { status: commentsStatus, message: commentData } =
+    await getCommentsOfPost(postId)
+
   return (
     <div className="m-4">
       <UserProfile userData={authorData} />
@@ -39,7 +43,7 @@ export default async function ViewPostContent({ params }: Props) {
         postId={postData.id}
       />
       <CommentBox postId={postData.id} />
-      <ViewComments comments={postData.comments} />
+      <ViewComments comments={commentData} />
     </div>
   )
 }
