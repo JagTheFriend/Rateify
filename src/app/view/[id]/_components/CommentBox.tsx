@@ -5,8 +5,9 @@ import { postComment } from '~/server/comment-actions'
 
 export default function CommentBox() {
   return (
-    <section className="flex flex-row gap-2 mt-5">
+    <section className="mt-5">
       <form
+        className="w-full flex flex-row gap-2"
         action={async (formData) => {
           formData.append('postId', '')
           const { status } = await postComment(formData)
@@ -30,7 +31,7 @@ export default function CommentBox() {
           name="commentContent"
           type="text"
           placeholder="Type here"
-          className="input input-bordered w-full"
+          className="input input-bordered w-full max-w-xs"
           required
         />
         <button className="btn btn-ghost" type="submit">
