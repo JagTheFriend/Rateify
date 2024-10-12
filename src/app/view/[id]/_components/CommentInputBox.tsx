@@ -4,7 +4,7 @@ import { useRef } from 'react'
 import { toast } from 'sonner'
 import { postComment } from '~/server/comment-actions'
 
-export default function CommentBox({ postId }: { postId: string }) {
+export default function CommentInputBox({ postId }: { postId: string }) {
   const formRef = useRef<HTMLFormElement>(null)
   return (
     <section className="mt-5">

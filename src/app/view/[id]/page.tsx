@@ -5,7 +5,7 @@ import { formatNumber } from '~/lib/utils'
 import { getCommentsOfPost } from '~/server/comment-actions'
 import { getUserById } from '~/server/general-actions'
 import { getPostData } from '~/server/post-actions'
-import CommentBox from './_components/CommentBox'
+import CommentInputBox from './_components/CommentInputBox'
 import DisplayCounters from './_components/DisplayCounters'
 import ImageCarousel from './_components/ImageCarousel'
 import UserProfile from './_components/UserProfile'
@@ -45,7 +45,7 @@ export default async function ViewPostContent({ params }: Props) {
         numberOfComments={formatNumber(postData.commentCounter)}
         postId={postData.id}
       />
-      <CommentBox postId={postData.id} />
+      <CommentInputBox postId={postData.id} />
       <ViewComments comments={commentData} />
     </div>
   )
