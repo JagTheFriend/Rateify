@@ -1,7 +1,6 @@
 'use server'
 
 import { notFound } from 'next/navigation'
-import { formatNumber } from '~/lib/utils'
 import { getCommentsOfPost } from '~/server/comment-actions'
 import { getUserById } from '~/server/general-actions'
 import { getPostData } from '~/server/post-actions'
@@ -40,9 +39,9 @@ export default async function ViewPostContent({ params }: Props) {
         <p className="text-base">{postData.description}</p>
       </section>
       <DisplayCounters
-        likeCounter={formatNumber(postData.likeCounter)}
-        dislikeCounter={formatNumber(postData.dislikeCounter)}
-        numberOfComments={formatNumber(postData.commentCounter)}
+        likeCounter={postData.likeCounter}
+        dislikeCounter={postData.dislikeCounter}
+        numberOfComments={postData.commentCounter}
         postId={postData.id}
       />
       <CommentInputBox postId={postData.id} />
