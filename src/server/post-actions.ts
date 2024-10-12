@@ -2,6 +2,7 @@
 
 import { auth } from '@clerk/nextjs/server'
 import { getStorage, ref, uploadBytes } from 'firebase/storage'
+import { revalidatePath } from 'next/cache'
 import { v4 as uuidv4 } from 'uuid'
 import type { ReturnTypeOfPost } from '~/lib/types'
 import { db, firebaseApp } from './db'
@@ -129,6 +130,7 @@ export async function likeOrDislikePost(
         },
       })
     }
+    revalidatePath(`/view/${postId}`)
     return { message: 'Success', status: 200 }
   } catch (error) {
     return { message: 'Server Error', status: 503 }
