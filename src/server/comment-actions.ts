@@ -42,19 +42,34 @@ export async function postComment(formData: FormData) {
   }
 }
 
-export async function likeComment(commentId: string) {
+export async function likeOrDislikeComment(
+  commentId: string,
+  decrement = false,
+) {
   try {
-    const { postId } = await db.comment.update({
-      where: {
-        id: commentId,
-      },
-      data: {
-        likeCounter: {
-          increment: 1,
+    if (decrement) {
+      await db.comment.update({
+        where: {
+          id: commentId,
         },
-      },
-    })
-    revalidatePath(`/view/${postId}`)
+        data: {
+          likeCounter: {
+            increment: 1,
+          },
+        },
+      })
+    } else {
+      await db.comment.update({
+        where: {
+          id: commentId,
+        },
+        data: {
+          likeCounter: {
+            decrement: 1,
+          },
+        },
+      })
+    }
     return { message: 'Liked Comment', status: 200 }
   } catch (error) {
     return {

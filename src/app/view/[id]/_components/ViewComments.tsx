@@ -5,8 +5,10 @@ import { useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { toast } from 'sonner'
 import type { CustomUserType } from '~/lib/types'
-import { formatNumber } from '~/lib/utils'
-import { getCommentsOfPost, likeComment } from '~/server/comment-actions'
+import {
+  getCommentsOfPost,
+  likeOrDislikeComment,
+} from '~/server/comment-actions'
 
 function Comment({
   comment,
@@ -31,30 +33,46 @@ function Comment({
       <button
         className="flex flex-row gap-2"
         onClick={async () => {
-          const { status } = await likeComment(comment.id)
-          if (status === 200) {
-            toast.success('Comment Liked')
+          const icon = document.getElementById(comment.id + 'likeIcon')
+
+          if (icon?.getAttribute('fill') === 'red') {
+            const { status } = await likeOrDislikeComment(
+              comment.id ?? '',
+              true,
+            )
+            if (status !== 200) {
+              return toast.error(
+                'Server Error Occurred. Try again after sometime',
+              )
+            }
+
+            icon.setAttribute('fill', 'none')
+            return
           }
 
+          const { status } = await likeOrDislikeComment(comment.id ?? '')
           if (status !== 200) {
-            toast.error('Server Error Occurred. Try again after sometime')
+            return toast.error(
+              'Server Error Occurred. Try again after sometime',
+            )
           }
+          icon?.setAttribute('fill', 'red')
         }}
       >
         <svg
+          id={comment.id + 'likeIcon'}
           xmlns="http://www.w3.org/2000/svg"
           width="24"
           height="24"
           viewBox="0 0 24 24"
           fill="none"
-          stroke="white"
+          stroke="red"
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
         >
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
         </svg>
-        {formatNumber(comment.likeCounter)}
       </button>
     </div>
   )
