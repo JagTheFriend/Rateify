@@ -81,7 +81,7 @@ export default function ViewComments({
 
             if (status !== 200) {
               setHasMore(false)
-              toast.error('Unable to fetch more comments')
+              // toast.error('Unable to fetch more comments')
             }
             setComments([...comments, ...message])
           }}
