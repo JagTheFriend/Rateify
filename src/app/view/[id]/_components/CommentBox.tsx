@@ -1,12 +1,15 @@
 'use client'
 
+import { useRef } from 'react'
 import { toast } from 'sonner'
 import { postComment } from '~/server/comment-actions'
 
 export default function CommentBox({ postId }: { postId: string }) {
+  const formRef = useRef<HTMLFormElement>(null)
   return (
     <section className="mt-5">
       <form
+        ref={formRef}
         className="w-full flex flex-row gap-2"
         action={async (formData) => {
           formData.append('postId', postId)
@@ -19,6 +22,7 @@ export default function CommentBox({ postId }: { postId: string }) {
 
           if (status === 200) {
             toast.success('Comment Posted')
+            formRef.current?.reset()
             return
           }
         }}
