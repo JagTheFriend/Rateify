@@ -2,20 +2,27 @@
 
 import type { Comment } from '@prisma/client'
 import { toast } from 'sonner'
+import type { CustomUserType } from '~/lib/types'
 import { formatNumber } from '~/lib/utils'
 import { likeComment } from '~/server/comment-actions'
 
-function Comment({ comment }: { comment: Comment }) {
+function Comment({
+  comment,
+  authorDetail,
+}: { comment: Comment; authorDetail: CustomUserType | undefined }) {
   return (
     <div className="flex flex-row items-center justify-between">
       <div className="flex flex-row gap-2">
         <div className="avatar">
           <div className="w-11 rounded-full">
-            <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+            <img
+              src={authorDetail?.image}
+              alt={`${authorDetail?.username}'s profile image`}
+            />
           </div>
         </div>
         <div className="flex flex-col">
-          <p className="font-bold">SampleUserName</p>
+          <p className="font-bold">{authorDetail?.username}</p>
           {comment.content}
         </div>
       </div>
@@ -51,11 +58,17 @@ function Comment({ comment }: { comment: Comment }) {
   )
 }
 
-export default function ViewComments({ comments }: { comments: Comment[] }) {
+export default function ViewComments({
+  comments,
+}: { comments: (Comment & { authorData: CustomUserType | undefined })[] }) {
   return (
     <section className="mt-5 border-b-2 border-base-100 flex flex-col gap-2">
       {comments.map((comment) => (
-        <Comment comment={comment} key={Math.random()} />
+        <Comment
+          comment={comment}
+          key={Math.random()}
+          authorDetail={comment.authorData}
+        />
       ))}
     </section>
   )

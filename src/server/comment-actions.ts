@@ -1,7 +1,8 @@
 'use server'
 
-import { auth } from '@clerk/nextjs/server'
+import { auth, clerkClient } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
+import { getUserDetail } from '~/lib/utils'
 import { db } from './db'
 
 export async function postComment(formData: FormData) {
@@ -67,5 +68,17 @@ export async function getCommentsOfPost(postId: string) {
     },
   })
 
-  return { status: 2030, message: comments }
+  const commentAuthors = await clerkClient().users.getUserList({
+    userId: comments.map((comment) => comment.authorId),
+  })
+  const userData = commentAuthors.data.map((commentAuthor) =>
+    getUserDetail(commentAuthor),
+  )
+
+  const finalData = comments.map((comment) => ({
+    ...comment,
+    authorData: userData.filter((user) => user.id === comment.authorId)[0],
+  }))
+
+  return { status: 2030, message: finalData }
 }
