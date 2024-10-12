@@ -35,10 +35,7 @@ export async function newPost(
   try {
     let index = 0
     for (let file of uploadData.imageFiles) {
-      const storageRef = ref(
-        storage,
-        `posts/${uploadData.postId}/${uploadData.imageFiles[index]}`,
-      )
+      const storageRef = ref(storage, `posts/${uploadData.postId}/${index}`)
       await uploadBytes(storageRef, file, {
         contentType: file.type,
         customMetadata: {
@@ -60,6 +57,7 @@ export async function newPost(
     })
     return { message: uploadData.postId, status: 200 }
   } catch (error) {
+    console.warn(error)
     return { message: 'Server Error', status: 503 }
   }
 }
