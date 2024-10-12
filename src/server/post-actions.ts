@@ -92,12 +92,6 @@ export async function likeOrDislikePost(
   decrement = false,
 ): Promise<{ message: string; status: 404 | 200 | 503 }> {
   try {
-    const post = await db.post.findUnique({ where: { id: postId } })
-
-    if (!post) {
-      return { message: 'Post Not Found!', status: 404 }
-    }
-
     if (type == 'like') {
       if (!decrement) {
         await db.post.update({
