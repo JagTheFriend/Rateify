@@ -3,13 +3,13 @@
 import { toast } from 'sonner'
 import { postComment } from '~/server/comment-actions'
 
-export default function CommentBox() {
+export default function CommentBox({ postId }: { postId: string }) {
   return (
     <section className="mt-5">
       <form
         className="w-full flex flex-row gap-2"
         action={async (formData) => {
-          formData.append('postId', '')
+          formData.append('postId', postId)
           const { status } = await postComment(formData)
           if (status === 401) {
             toast.error('Unauthenticated')
@@ -17,12 +17,12 @@ export default function CommentBox() {
           }
 
           if (status === 503) {
-            toast.error('Post not found!')
+            toast.error('Server Error')
             return
           }
 
           if (status === 200) {
-            toast.success('Comment Posted!')
+            toast.success('Comment Posted')
             return
           }
         }}
