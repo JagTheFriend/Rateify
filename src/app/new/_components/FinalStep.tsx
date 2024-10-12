@@ -3,7 +3,7 @@
 import { useAtomValue } from 'jotai'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
-import { newPost } from '~/server/actions'
+import { newPost } from '~/server/post-actions'
 import { UploadedFiles } from './data'
 
 function MetadataForm() {
