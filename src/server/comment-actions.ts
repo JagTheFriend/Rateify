@@ -50,7 +50,7 @@ export async function likeComment(commentId: string) {
       },
     })
     revalidatePath(`/view/${postId}`)
-    return { message: 'Comment Liked', status: 200 }
+    return { message: 'Liked Comment', status: 200 }
   } catch (error) {
     return { message: 'Server Error Occurred. Try again later', status: 503 }
   }
