@@ -60,15 +60,7 @@ export async function newPost(
     })
     return { message: uploadData.postId, status: 200 }
   } catch (error) {
-    const errorMessage = (error as Error).message
-    if (
-      !errorMessage.startsWith(
-        "unhandledRejection: TypeError: Cannot read properties of undefined (reading 'path')",
-      )
-    ) {
-      return { message: 'Server Error', status: 503 }
-    }
-    return { message: uploadData.postId, status: 200 }
+    return { message: 'Server Error', status: 503 }
   }
 }
 
