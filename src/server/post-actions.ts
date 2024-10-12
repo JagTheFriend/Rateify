@@ -99,6 +99,7 @@ export async function getPostData(postId: string): Promise<{
 export async function likeOrDislikePost(
   type: 'like' | 'dislike',
   postId: string,
+  decrement = false,
 ): Promise<{ message: string; status: 404 | 200 | 503 }> {
   try {
     const post = await db.post.findUnique({ where: { id: postId } })
@@ -108,27 +109,53 @@ export async function likeOrDislikePost(
     }
 
     if (type == 'like') {
-      await db.post.update({
-        where: {
-          id: postId,
-        },
-        data: {
-          likeCounter: {
-            increment: 1,
+      if (!decrement) {
+        await db.post.update({
+          where: {
+            id: postId,
           },
-        },
-      })
+          data: {
+            likeCounter: {
+              increment: 1,
+            },
+          },
+        })
+      } else {
+        await db.post.update({
+          where: {
+            id: postId,
+          },
+          data: {
+            likeCounter: {
+              decrement: 1,
+            },
+          },
+        })
+      }
     } else {
-      await db.post.update({
-        where: {
-          id: postId,
-        },
-        data: {
-          dislikeCounter: {
-            increment: 1,
+      if (!decrement) {
+        await db.post.update({
+          where: {
+            id: postId,
           },
-        },
-      })
+          data: {
+            dislikeCounter: {
+              increment: 1,
+            },
+          },
+        })
+      } else {
+        await db.post.update({
+          where: {
+            id: postId,
+          },
+          data: {
+            dislikeCounter: {
+              decrement: 1,
+            },
+          },
+        })
+      }
     }
     revalidatePath(`/view/${postId}`)
     return { message: 'Success', status: 200 }

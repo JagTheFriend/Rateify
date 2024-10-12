@@ -1,6 +1,5 @@
 'use client'
 
-import { useRef } from 'react'
 import { toast } from 'sonner'
 import { likeOrDislikePost } from '~/server/post-actions'
 
@@ -16,15 +15,24 @@ function LikeButton({ likeCounter, postId }: Partial<Props>) {
     <button
       className="shadow-[0_0_0_3px_#000000_inset] px-2 py-2 bg-transparent border border-gray-500 text-white rounded-lg transform hover:-translate-y-1 transition duration-400 flex flex-row gap-2 items-center"
       onClick={async () => {
-        const { status } = await likeOrDislikePost('like', postId ?? '')
+        const icon = document.getElementById(postId + 'likeIcon')
 
+        if (icon?.getAttribute('fill') === 'dodgerblue') {
+          const { status } = await likeOrDislikePost('like', postId ?? '', true)
+          if (status !== 200) {
+            return toast.error('Server Error Occurred. Try again later')
+          }
+
+          icon.setAttribute('fill', 'none')
+          return
+        }
+
+        const { status } = await likeOrDislikePost('like', postId ?? '')
         if (status !== 200) {
           return toast.error('Server Error Occurred. Try again later')
         }
 
-        document
-          .getElementById(postId + 'likeIcon')
-          ?.setAttribute('fill', 'dodgerblue')
+        icon?.setAttribute('fill', 'dodgerblue')
       }}
     >
       <svg
@@ -47,20 +55,32 @@ function LikeButton({ likeCounter, postId }: Partial<Props>) {
 }
 
 function DislikeButton({ dislikeCounter, postId }: Partial<Props>) {
-  const iconRef = useRef()
-
   return (
     <button
       className="shadow-[0_0_0_3px_#000000_inset] px-2 py-2 bg-transparent border border-gray-500 text-white rounded-lg transform hover:-translate-y-1 transition duration-400 flex flex-row gap-2 items-center"
       onClick={async () => {
+        const icon = document.getElementById(postId + 'dislikeIcon')
+
+        if (icon?.getAttribute('fill') === 'orangered') {
+          const { status } = await likeOrDislikePost(
+            'dislike',
+            postId ?? '',
+            true,
+          )
+          if (status !== 200) {
+            return toast.error('Server Error Occurred. Try again later')
+          }
+
+          icon.setAttribute('fill', 'none')
+          return
+        }
+
         const { status } = await likeOrDislikePost('dislike', postId ?? '')
         if (status !== 200) {
           return toast.error('Server Error Occurred. Try again later')
         }
 
-        document
-          .getElementById(postId + 'dislikeIcon')
-          ?.setAttribute('fill', 'orangered')
+        icon?.setAttribute('fill', 'orangered')
       }}
     >
       <svg
