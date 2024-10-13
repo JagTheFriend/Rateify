@@ -55,7 +55,7 @@ export default function DisplayPosts({
               setHasMore(false)
               // toast.error('Unable to fetch more posts')
             }
-            if (posts !== message) {
+            if (JSON.stringify(posts) !== JSON.stringify(message)) {
               setPosts([...posts, ...(message as CustomPostType[])])
             } else {
               setHasMore(false)

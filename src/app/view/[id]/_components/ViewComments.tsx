@@ -119,10 +119,15 @@ export default function ViewComments({
               setHasMore(false)
               // toast.error('Unable to fetch more comments')
             }
-            setComments([
-              ...comments,
-              ...(message as (Comment & { authorData: CustomUserType })[]),
-            ])
+
+            if (JSON.stringify(comments) !== JSON.stringify(message)) {
+              setComments([
+                ...comments,
+                ...(message as (Comment & { authorData: CustomUserType })[]),
+              ])
+            } else {
+              setHasMore(false)
+            }
           }}
           hasMore={hasMore}
           loader={
