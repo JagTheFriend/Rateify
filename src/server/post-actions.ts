@@ -153,7 +153,7 @@ export async function likeOrDislikePost(
   }
 }
 
-export async function getListOfPosts(cursorId?: string) {
+export async function getListOfPosts(cursorId?: string, search?: string) {
   try {
     var posts
 
@@ -162,6 +162,18 @@ export async function getListOfPosts(cursorId?: string) {
         take: 10,
         orderBy: {
           createdAt: 'desc',
+        },
+        where: {
+          OR: [
+            {
+              title: {
+                contains: search,
+              },
+              description: {
+                contains: search,
+              },
+            },
+          ],
         },
       })
     } else {
@@ -172,6 +184,18 @@ export async function getListOfPosts(cursorId?: string) {
         },
         cursor: {
           id: cursorId,
+        },
+        where: {
+          OR: [
+            {
+              title: {
+                contains: search,
+              },
+              description: {
+                contains: search,
+              },
+            },
+          ],
         },
       })
     }
