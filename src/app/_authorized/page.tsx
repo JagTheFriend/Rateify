@@ -1,9 +1,9 @@
-'use client'
+'use server'
 
 import Footer from '~/components/footer'
 import NavbarComponent from './_components/Navbar'
 
-export default function LandingPageAuthorized() {
+export default async function LandingPageAuthorized() {
   return (
     <main className="flex flex-col h-screen">
       <div className="flex-grow">

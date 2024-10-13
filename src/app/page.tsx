@@ -1,5 +1,3 @@
-'use client'
-
 import { ClerkLoaded, ClerkLoading, SignedIn, SignedOut } from '@clerk/nextjs'
 import LandingPageAuthorized from './_authorized/page'
 import LandingPageUnauthorized from './_unauthorized/page'
