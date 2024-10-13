@@ -57,12 +57,15 @@ export default function DisplayPosts({
             setPosts([...posts, ...(message as CustomPostType[])])
           }}
           loader={
-            <div className="flex items-center gap-4">
-              <div className="skeleton h-11 w-11 shrink-0 rounded-full"></div>
-              <div className="flex flex-col gap-4">
-                <div className="skeleton h-4 w-20"></div>
-                <div className="skeleton h-3 w-28"></div>
+            <div className="flex flex-col gap-4 mx-4">
+              <div className="flex flex-row gap-4">
+                <div className="skeleton h-11 w-11 shrink-0 rounded-full"></div>
+                <div className="flex flex-col gap-4">
+                  <div className="skeleton h-4 w-20"></div>
+                  <div className="skeleton h-3 w-28"></div>
+                </div>
               </div>
+              <div className="skeleton h-72 w-full shrink-0 rounded-md"></div>
             </div>
           }
         >
