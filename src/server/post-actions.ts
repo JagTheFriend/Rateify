@@ -153,7 +153,7 @@ export async function likeOrDislikePost(
   }
 }
 
-export async function getListOfPosts(cursorId?: string, search?: string) {
+export async function getListOfPosts(cursorId?: string, search = '') {
   try {
     var posts
 
@@ -169,6 +169,8 @@ export async function getListOfPosts(cursorId?: string, search?: string) {
               title: {
                 contains: search,
               },
+            },
+            {
               description: {
                 contains: search,
               },
@@ -191,6 +193,8 @@ export async function getListOfPosts(cursorId?: string, search?: string) {
               title: {
                 contains: search,
               },
+            },
+            {
               description: {
                 contains: search,
               },
@@ -199,6 +203,7 @@ export async function getListOfPosts(cursorId?: string, search?: string) {
         },
       })
     }
+
     const postAuthors = await clerkClient().users.getUserList({
       userId: posts.map((post) => post.authorId),
     })
