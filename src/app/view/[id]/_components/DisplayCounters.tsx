@@ -29,23 +29,22 @@ function LikeButton({ likeCounter, postId }: Partial<Props>) {
 
         if (icon?.getAttribute('fill') === 'dodgerblue') {
           startTransition(() => updateOptimisticLike(-1))
+          icon.setAttribute('fill', 'none')
           const { status } = await likeOrDislikePost('like', postId ?? '', true)
           if (status !== 200) {
             return toast.error(
               'Server Error Occurred. Try again after sometime',
             )
           }
-
-          icon.setAttribute('fill', 'none')
           return
         }
 
         startTransition(() => updateOptimisticLike(1))
+        icon?.setAttribute('fill', 'dodgerblue')
         const { status } = await likeOrDislikePost('like', postId ?? '')
         if (status !== 200) {
           return toast.error('Server Error Occurred. Try again after sometime')
         }
-        icon?.setAttribute('fill', 'dodgerblue')
       }}
     >
       <svg
@@ -84,6 +83,7 @@ function DislikeButton({ dislikeCounter, postId }: Partial<Props>) {
 
         if (icon?.getAttribute('fill') === 'orangered') {
           startTransition(() => updateOptimisticDislike(-1))
+          icon.setAttribute('fill', 'none')
           const { status } = await likeOrDislikePost(
             'dislike',
             postId ?? '',
@@ -95,17 +95,16 @@ function DislikeButton({ dislikeCounter, postId }: Partial<Props>) {
             )
           }
 
-          icon.setAttribute('fill', 'none')
           return
         }
 
         startTransition(() => updateOptimisticDislike(1))
+        icon?.setAttribute('fill', 'orangered')
+
         const { status } = await likeOrDislikePost('dislike', postId ?? '')
         if (status !== 200) {
           return toast.error('Server Error Occurred. Try again after sometime')
         }
-
-        icon?.setAttribute('fill', 'orangered')
       }}
     >
       <svg
