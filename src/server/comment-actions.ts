@@ -134,7 +134,7 @@ export async function getCommentsOfPost(
         } as CustomUserType),
     }))
 
-    return { status: 2030, message: finalData }
+    return { status: 200, message: finalData }
   } catch (error) {
     return {
       message: 'Server Error Occurred. Try again after sometime',
