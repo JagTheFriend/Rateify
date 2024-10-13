@@ -8,6 +8,7 @@ import DisplayPosts from '../_authorized/_components/DisplayPosts'
 
 export default function SearchForPost() {
   const [currentPosts, setCurrentPosts] = useState<CustomPostType[]>([])
+  const [search, setSearch] = useState('')
 
   return (
     <>
@@ -32,6 +33,9 @@ export default function SearchForPost() {
               className="grow"
               placeholder="Search"
               name="search-content"
+              onInput={(e) => {
+                setSearch(e.currentTarget.value ?? '')
+              }}
             />
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -55,7 +59,7 @@ export default function SearchForPost() {
         </form>
       </section>
       <section>
-        <DisplayPosts initialPostData={currentPosts} />
+        <DisplayPosts initialPostData={currentPosts} search={search} />
       </section>
     </>
   )

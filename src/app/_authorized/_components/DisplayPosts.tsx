@@ -31,7 +31,8 @@ function Post({ post }: { post: CustomPostType }) {
 
 export default function DisplayPosts({
   initialPostData,
-}: { initialPostData: CustomPostType[] }) {
+  search = '',
+}: { initialPostData: CustomPostType[]; search?: string }) {
   const [posts, setPosts] = useState(initialPostData)
   const [hasMore, setHasMore] = useState(true)
 
@@ -48,13 +49,17 @@ export default function DisplayPosts({
           hasMore={hasMore}
           next={async () => {
             const cursor = posts[posts.length - 1]?.id
-            const { status, message } = await getListOfPosts(cursor)
+            const { status, message } = await getListOfPosts(cursor, search)
 
             if (status !== 200) {
               setHasMore(false)
               // toast.error('Unable to fetch more posts')
             }
-            setPosts([...posts, ...(message as CustomPostType[])])
+            if (posts !== message) {
+              setPosts([...posts, ...(message as CustomPostType[])])
+            } else {
+              setHasMore(false)
+            }
           }}
           loader={
             <div className="flex flex-col gap-4 mx-4">
