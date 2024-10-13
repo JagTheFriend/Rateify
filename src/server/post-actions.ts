@@ -185,7 +185,7 @@ export async function getListOfPosts(cursorId?: string) {
 
     const finalData: CustomPostType[] = posts.map((post) => ({
       ...post,
-      imageUrls: new Array(post.numberOfImages).map(
+      imageUrls: [...Array(post.numberOfImages).keys()].map(
         (_, index) =>
           `https://firebasestorage.googleapis.com/v0/b/rateify-17fc8.appspot.com/o/posts%2F${post.id}%2F${index}?alt=media`,
       ),
@@ -199,7 +199,6 @@ export async function getListOfPosts(cursorId?: string) {
           username: 'Unknown',
         } as CustomUserType),
     }))
-
     return { status: 203, message: finalData }
   } catch (error) {
     return {
