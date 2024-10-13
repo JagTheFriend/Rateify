@@ -46,9 +46,10 @@ export async function likeOrDislikeComment(
   commentId: string,
   decrement = false,
 ) {
+  var postId
   try {
-    if (decrement) {
-      await db.comment.update({
+    if (!decrement) {
+      const postData = await db.comment.update({
         where: {
           id: commentId,
         },
@@ -58,8 +59,9 @@ export async function likeOrDislikeComment(
           },
         },
       })
+      postId = postData.postId
     } else {
-      await db.comment.update({
+      const postData = await db.comment.update({
         where: {
           id: commentId,
         },
@@ -69,7 +71,9 @@ export async function likeOrDislikeComment(
           },
         },
       })
+      postId = postData.postId
     }
+    revalidatePath(`/view/${postId}`)
     return { message: 'Success', status: 200 }
   } catch (error) {
     return {
