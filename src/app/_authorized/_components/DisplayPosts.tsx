@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import type { CustomUserType } from '~/lib/types'
 import { getListOfPosts } from '~/server/post-actions'
+import type { CustomPostType } from './type'
 
 function Post({ post }: { post: Post & { authorData: CustomUserType } }) {
   return <></>
@@ -12,7 +13,7 @@ function Post({ post }: { post: Post & { authorData: CustomUserType } }) {
 
 export default function DisplayPosts({
   initialPostData,
-}: { initialPostData: (Post & { authorData: CustomUserType })[] }) {
+}: { initialPostData: CustomPostType[] }) {
   const [posts, setPosts] = useState(initialPostData)
   const [hasMore, setHasMore] = useState(true)
 
@@ -35,10 +36,7 @@ export default function DisplayPosts({
               setHasMore(false)
               // toast.error('Unable to fetch more posts')
             }
-            setPosts([
-              ...posts,
-              ...(message as (Post & { authorData: CustomUserType })[]),
-            ])
+            setPosts([...posts, ...(message as CustomPostType[])])
           }}
           loader={
             <div className="flex items-center gap-4">
