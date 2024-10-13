@@ -171,7 +171,6 @@ export async function getListOfPosts(cursorId?: string) {
         },
       })
     }
-    console.log(posts)
     const postAuthors = await clerkClient().users.getUserList({
       userId: posts.map((post) => post.authorId),
     })

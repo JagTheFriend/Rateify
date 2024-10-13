@@ -8,7 +8,7 @@ import { getListOfPosts } from '~/server/post-actions'
 import type { CustomPostType } from './type'
 
 function Post({ post }: { post: Post & { authorData: CustomUserType } }) {
-  return <></>
+  return <>{post.id}</>
 }
 
 export default function DisplayPosts({
