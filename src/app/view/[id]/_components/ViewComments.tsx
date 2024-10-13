@@ -107,7 +107,7 @@ export default function ViewComments({
       <div className="overflow-auto no-scrollbar">
         <InfiniteScroll
           className="no-scrollbar flex flex-col gap-2"
-          dataLength={comments.length} //This is important field to render the next data
+          dataLength={comments.length}
           next={async () => {
             const cursor = comments[comments.length - 1]?.id
             const { status, message } = await getCommentsOfPost(

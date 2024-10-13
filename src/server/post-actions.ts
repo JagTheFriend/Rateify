@@ -153,7 +153,7 @@ export async function getListOfPosts(cursorId?: string) {
   try {
     var posts
 
-    if (cursorId) {
+    if (!cursorId) {
       posts = await db.post.findMany({
         take: 10,
         orderBy: {
@@ -171,7 +171,7 @@ export async function getListOfPosts(cursorId?: string) {
         },
       })
     }
-
+    console.log(posts)
     const postAuthors = await clerkClient().users.getUserList({
       userId: posts.map((post) => post.authorId),
     })
