@@ -1,7 +1,7 @@
 'use client'
 
 import type { Comment } from '@prisma/client'
-import { useOptimistic, useState, useTransition } from 'react'
+import { useEffect, useOptimistic, useState, useTransition } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { toast } from 'sonner'
 import type { CustomUserType } from '~/lib/types'
@@ -97,6 +97,10 @@ export default function ViewComments({
 }: { initialComments: (Comment & { authorData: CustomUserType })[] }) {
   const [comments, setComments] = useState(initialComments)
   const [hasMore, setHasMore] = useState(true)
+
+  useEffect(() => {
+    setComments(initialComments)
+  }, [initialComments])
 
   return (
     <section className="mt-5 border-b-2 max-h-screen border-base-100 flex flex-col gap-2 relative">
