@@ -3,11 +3,29 @@
 import type { Post } from '@prisma/client'
 import { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import type { CustomPostType, CustomUserType } from '~/lib/types'
+import DisplayCounters from '~/app/view/[id]/_components/DisplayCounters'
+import ImageCarousel from '~/app/view/[id]/_components/ImageCarousel'
+import UserProfile from '~/app/view/[id]/_components/UserProfile'
+import type { CustomPostType } from '~/lib/types'
 import { getListOfPosts } from '~/server/post-actions'
 
-function Post({ post }: { post: Post & { authorData: CustomUserType } }) {
-  return <>{post.id}</>
+function Post({ post }: { post: CustomPostType }) {
+  return (
+    <div className="mt-2">
+      <UserProfile userData={post.authorData} />
+      <ImageCarousel imageUrls={post.imageUrls} />
+      <section className="my-2">
+        <p className="text-lg">{post.title}</p>
+        <p className="text-base">{post.description}</p>
+      </section>
+      <DisplayCounters
+        likeCounter={post.likeCounter}
+        dislikeCounter={post.dislikeCounter}
+        numberOfComments={post.commentCounter}
+        postId={post.id}
+      />
+    </div>
+  )
 }
 
 export default function DisplayPosts({
@@ -21,7 +39,7 @@ export default function DisplayPosts({
   }, [initialPostData])
 
   return (
-    <div className="mt-5 border-b-2 max-h-screen border-base-100 flex flex-col gap-2 relative">
+    <div className="mt-5 mx-2 border-b-2 max-h-screen border-base-100 flex flex-col gap-2 relative">
       <div className="overflow-auto no-scrollbar">
         <InfiniteScroll
           className="no-scrollbar flex flex-col gap-2"
