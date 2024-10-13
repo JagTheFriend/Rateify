@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { useOptimistic, useTransition } from 'react'
 import { toast } from 'sonner'
 import { formatNumber } from '~/lib/utils'
@@ -126,9 +127,22 @@ function DislikeButton({ dislikeCounter, postId }: Partial<Props>) {
   )
 }
 
-function NumberOfComments({ numberOfComments }: Partial<Props>) {
+function NumberOfComments({
+  numberOfComments,
+  redirectUser,
+  postId,
+}: Partial<Props & { redirectUser?: boolean }>) {
+  const { push } = useRouter()
+
   return (
-    <button className="shadow-[0_0_0_3px_#000000_inset] px-2 py-2 bg-transparent border border-gray-500 text-white rounded-lg transform hover:-translate-y-1 transition duration-400 flex flex-row gap-2 items-center">
+    <button
+      onClick={() => {
+        if (redirectUser) {
+          push(`/view/${postId}`)
+        }
+      }}
+      className="shadow-[0_0_0_3px_#000000_inset] px-2 py-2 bg-transparent border border-gray-500 text-white rounded-lg transform hover:-translate-y-1 transition duration-400 flex flex-row gap-2 items-center"
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="24"
@@ -147,7 +161,9 @@ function NumberOfComments({ numberOfComments }: Partial<Props>) {
   )
 }
 
-export default function DisplayCounters(propData: Props) {
+export default function DisplayCounters(
+  propData: Props & { redirectUser?: boolean },
+) {
   return (
     <section className="flex flex-row gap-4 mt-4">
       <LikeButton postId={propData.postId} likeCounter={propData.likeCounter} />
@@ -155,7 +171,11 @@ export default function DisplayCounters(propData: Props) {
         postId={propData.postId}
         dislikeCounter={propData.dislikeCounter}
       />
-      <NumberOfComments numberOfComments={propData.numberOfComments} />
+      <NumberOfComments
+        numberOfComments={propData.numberOfComments}
+        redirectUser={propData.redirectUser}
+        postId={propData.postId}
+      />
     </section>
   )
 }

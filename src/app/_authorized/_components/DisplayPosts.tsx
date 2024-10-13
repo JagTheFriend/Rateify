@@ -22,6 +22,7 @@ function Post({ post }: { post: CustomPostType }) {
         likeCounter={post.likeCounter}
         dislikeCounter={post.dislikeCounter}
         numberOfComments={post.commentCounter}
+        redirectUser={true}
         postId={post.id}
       />
     </div>
