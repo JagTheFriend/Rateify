@@ -1,6 +1,8 @@
 'use server'
 
+import type { Comment } from '@prisma/client'
 import { notFound } from 'next/navigation'
+import type { CustomUserType } from '~/lib/types'
 import { getCommentsOfPost } from '~/server/comment-actions'
 import { getUserById } from '~/server/general-actions'
 import { getPostData } from '~/server/post-actions'
@@ -45,7 +47,13 @@ export default async function ViewPostContent({ params }: Props) {
         postId={postData.id}
       />
       <CommentInputBox postId={postData.id} />
-      <ViewComments initialComments={commentData} />
+      <ViewComments
+        initialComments={
+          commentData as (Comment & {
+            authorData: CustomUserType
+          })[]
+        }
+      />
     </div>
   )
 }
