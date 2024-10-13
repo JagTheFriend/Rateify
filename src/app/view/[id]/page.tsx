@@ -6,10 +6,10 @@ import type { CustomUserType } from '~/lib/types'
 import { getCommentsOfPost } from '~/server/comment-actions'
 import { getUserById } from '~/server/general-actions'
 import { getPostData } from '~/server/post-actions'
+import DisplayCounters from '../../../components/DisplayCounters'
+import ImageCarousel from '../../../components/ImageCarousel'
+import UserProfile from '../../../components/UserProfile'
 import CommentInputBox from './_components/CommentInputBox'
-import DisplayCounters from './_components/DisplayCounters'
-import ImageCarousel from './_components/ImageCarousel'
-import UserProfile from './_components/UserProfile'
 import ViewComments from './_components/ViewComments'
 
 type Props = {

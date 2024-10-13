@@ -3,9 +3,9 @@
 import type { Post } from '@prisma/client'
 import { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import DisplayCounters from '~/app/view/[id]/_components/DisplayCounters'
-import ImageCarousel from '~/app/view/[id]/_components/ImageCarousel'
-import UserProfile from '~/app/view/[id]/_components/UserProfile'
+import DisplayCounters from '~/components/DisplayCounters'
+import ImageCarousel from '~/components/ImageCarousel'
+import UserProfile from '~/components/UserProfile'
 import type { CustomPostType } from '~/lib/types'
 import { getListOfPosts } from '~/server/post-actions'
 
