@@ -1,10 +1,11 @@
 'use server'
 
-import { auth } from '@clerk/nextjs/server'
+import { auth, clerkClient } from '@clerk/nextjs/server'
 import { getStorage, ref, uploadBytes } from 'firebase/storage'
 import { revalidatePath } from 'next/cache'
 import { v4 as uuidv4 } from 'uuid'
-import type { ReturnTypeOfPost } from '~/lib/types'
+import type { CustomUserType, ReturnTypeOfPost } from '~/lib/types'
+import { getUserDetail } from '~/lib/utils'
 import { db, firebaseApp } from './db'
 
 export async function newPost(
@@ -145,5 +146,58 @@ export async function likeOrDislikePost(
     return { message: 'Success', status: 200 }
   } catch (error) {
     return { message: 'Server Error', status: 503 }
+  }
+}
+
+export async function getListOfPosts(cursorId?: string) {
+  try {
+    var posts
+
+    if (cursorId) {
+      posts = await db.post.findMany({
+        take: 10,
+        orderBy: {
+          createdAt: 'desc',
+        },
+      })
+    } else {
+      posts = await db.post.findMany({
+        take: 10,
+        orderBy: {
+          createdAt: 'desc',
+        },
+        cursor: {
+          id: cursorId,
+        },
+      })
+    }
+
+    const postAuthors = await clerkClient().users.getUserList({
+      userId: posts.map((post) => post.authorId),
+    })
+
+    const userData = postAuthors.data.map((commentAuthor) =>
+      getUserDetail(commentAuthor),
+    )
+
+    const finalData = posts.map((post) => ({
+      ...post,
+      authorData:
+        userData.filter((user) => user.id === post.authorId)[0] ??
+        ({
+          id: 'DELETE_USER',
+          dateJoined: 2,
+          email: 'unknown@example.com',
+          image: '',
+          username: 'Unknown',
+        } as CustomUserType),
+    }))
+
+    return { status: 203, message: finalData }
+  } catch (error) {
+    return {
+      message: 'Server Error Occurred. Try again after sometime',
+      status: 503,
+    }
   }
 }
