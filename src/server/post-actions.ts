@@ -185,6 +185,10 @@ export async function getListOfPosts(cursorId?: string) {
 
     const finalData: CustomPostType[] = posts.map((post) => ({
       ...post,
+      images: new Array(post.numberOfImages).map(
+        (_, index) =>
+          `https://firebasestorage.googleapis.com/v0/b/rateify-17fc8.appspot.com/o/posts%2F${post.id}%2F${index}?alt=media`,
+      ),
       authorData:
         userData.filter((user) => user.id === post.authorId)[0] ??
         ({
