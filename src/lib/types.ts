@@ -11,3 +11,7 @@ export type CustomUserType = {
 export type ReturnTypeOfPost = Post & {
   imageUrls: string[]
 }
+export type CustomPostType = Post & {
+  authorData: CustomUserType
+  images: string[]
+}

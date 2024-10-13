@@ -3,9 +3,8 @@
 import type { Post } from '@prisma/client'
 import { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import type { CustomUserType } from '~/lib/types'
+import type { CustomPostType, CustomUserType } from '~/lib/types'
 import { getListOfPosts } from '~/server/post-actions'
-import type { CustomPostType } from './type'
 
 function Post({ post }: { post: Post & { authorData: CustomUserType } }) {
   return <>{post.id}</>

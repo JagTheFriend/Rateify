@@ -4,7 +4,11 @@ import { auth, clerkClient } from '@clerk/nextjs/server'
 import { getStorage, ref, uploadBytes } from 'firebase/storage'
 import { revalidatePath } from 'next/cache'
 import { v4 as uuidv4 } from 'uuid'
-import type { CustomUserType, ReturnTypeOfPost } from '~/lib/types'
+import type {
+  CustomPostType,
+  CustomUserType,
+  ReturnTypeOfPost,
+} from '~/lib/types'
 import { getUserDetail } from '~/lib/utils'
 import { db, firebaseApp } from './db'
 
@@ -179,7 +183,7 @@ export async function getListOfPosts(cursorId?: string) {
       getUserDetail(commentAuthor),
     )
 
-    const finalData = posts.map((post) => ({
+    const finalData: CustomPostType[] = posts.map((post) => ({
       ...post,
       authorData:
         userData.filter((user) => user.id === post.authorId)[0] ??
