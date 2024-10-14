@@ -12,7 +12,7 @@ export default function SearchForPost() {
 
   return (
     <>
-      <section className="mx-5 mt-2 justify-center items-center">
+      <section className="mx-5 mb-4 mt-2 justify-center items-center">
         <form
           className="flex flex-row gap-2 "
           action={async (formData: FormData) => {
