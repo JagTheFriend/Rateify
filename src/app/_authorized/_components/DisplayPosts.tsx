@@ -41,7 +41,7 @@ export default function DisplayPosts({
   }, [initialPostData])
 
   return (
-    <div className="mt-5 mx-2 border-b-2 max-h-screen border-base-100 flex flex-col gap-2 relative">
+    <div className="mx-2 border-b-2 max-h-screen border-base-100 flex flex-col gap-2 relative">
       <div className="overflow-auto no-scrollbar">
         <InfiniteScroll
           className="no-scrollbar flex flex-col gap-2"

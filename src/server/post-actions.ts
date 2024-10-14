@@ -153,7 +153,11 @@ export async function likeOrDislikePost(
   }
 }
 
-export async function getListOfPosts(cursorId?: string, search = '') {
+export async function getListOfPosts(
+  cursorId?: string,
+  search = '',
+  authorId = '',
+) {
   try {
     var posts
 
@@ -173,6 +177,11 @@ export async function getListOfPosts(cursorId?: string, search = '') {
             {
               description: {
                 contains: search,
+              },
+            },
+            {
+              authorId: {
+                equals: authorId,
               },
             },
           ],
@@ -197,6 +206,11 @@ export async function getListOfPosts(cursorId?: string, search = '') {
             {
               description: {
                 contains: search,
+              },
+            },
+            {
+              authorId: {
+                equals: authorId,
               },
             },
           ],
