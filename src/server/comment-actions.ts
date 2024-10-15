@@ -4,8 +4,9 @@ import { clerkClient } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import { type CustomUserType, SERVER_ERROR_MESSAGE } from '~/lib/types'
-import { checkAuthentication, getUserDetail } from '~/lib/utils'
+import { getUserDetail } from '~/lib/utils'
 import { db } from './db'
+import { checkAuthentication } from './general-actions'
 
 const PostCommentSchema = z.object({
   postId: z.string().min(1),
@@ -21,7 +22,7 @@ export async function postComment(formData: FormData) {
       postId,
       comment,
     })
-    const { userId: authorId } = checkAuthentication()
+    const { userId: authorId } = await checkAuthentication()
 
     await db.post.update({
       where: {
@@ -61,7 +62,7 @@ export async function likeOrDislikeComment(
       commentId,
       decrement,
     })
-    checkAuthentication()
+    await checkAuthentication()
 
     if (!decrement) {
       const postData = await db.comment.update({
@@ -109,7 +110,7 @@ export async function getCommentsOfPost(
       postId,
       currentCursor,
     })
-    checkAuthentication()
+    await checkAuthentication()
 
     let comments
     if (currentCursor) {

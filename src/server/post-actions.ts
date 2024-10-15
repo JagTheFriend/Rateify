@@ -11,8 +11,9 @@ import {
   type ReturnTypeOfPost,
   SERVER_ERROR_MESSAGE,
 } from '~/lib/types'
-import { checkAuthentication, getUserDetail } from '~/lib/utils'
+import { getUserDetail } from '~/lib/utils'
 import { db, firebaseApp } from './db'
+import { checkAuthentication } from './general-actions'
 
 const NewPostSchema = z.object({
   postId: z.string().trim().min(1),
@@ -32,7 +33,7 @@ export async function newPost(
   }
 
   try {
-    const currentUser = checkAuthentication()
+    const currentUser = await checkAuthentication()
     const parsedUploadData = NewPostSchema.parse(uploadData)
 
     if (
@@ -91,7 +92,7 @@ export async function getPostData(postId: string): Promise<{
       postId,
     })
 
-    checkAuthentication()
+    await checkAuthentication()
     const post = await db.post.findUnique({ where: { id: postId } })
 
     if (!post) {
@@ -136,7 +137,7 @@ export async function likeOrDislikePost(
       decrement,
     })
 
-    checkAuthentication()
+    await checkAuthentication()
 
     if (type == 'like') {
       if (!decrement) {
@@ -211,7 +212,7 @@ export async function getListOfPosts(
       search,
       authorId,
     })
-    checkAuthentication()
+    await checkAuthentication()
 
     var posts
 
