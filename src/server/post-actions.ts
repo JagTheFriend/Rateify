@@ -4,6 +4,7 @@ import { auth, clerkClient } from '@clerk/nextjs/server'
 import { getStorage, ref, uploadBytes } from 'firebase/storage'
 import { revalidatePath } from 'next/cache'
 import { v4 as uuidv4 } from 'uuid'
+import { z } from 'zod'
 import type {
   CustomPostType,
   CustomUserType,
@@ -11,6 +12,13 @@ import type {
 } from '~/lib/types'
 import { getUserDetail } from '~/lib/utils'
 import { db, firebaseApp } from './db'
+
+const NewPostSchema = z.object({
+  postId: z.string().trim().min(1),
+  title: z.string().trim().min(1),
+  description: z.string().trim().min(1),
+  imageFiles: z.instanceof(File).array().min(1),
+})
 
 export async function newPost(
   formData: FormData,
@@ -28,23 +36,31 @@ export async function newPost(
     imageFiles: formData.getAll('image') as File[],
   }
 
-  if (uploadData.imageFiles.filter((file) => file.size > 8.389e6).length > 0) {
-    return {
-      message: 'Image too big',
-      status: 507,
-    }
-  }
-
-  const storage = getStorage(firebaseApp)
-
   try {
+    const parsedUploadData = NewPostSchema.parse(uploadData)
+
+    if (
+      parsedUploadData.imageFiles.filter((file) => file.size > 8.389e6).length >
+      0
+    ) {
+      return {
+        message: 'Image too big',
+        status: 507,
+      }
+    }
+
+    const storage = getStorage(firebaseApp)
+
     let index = 0
-    for (let file of uploadData.imageFiles) {
-      const storageRef = ref(storage, `posts/${uploadData.postId}/${index}`)
+    for (let file of parsedUploadData.imageFiles) {
+      const storageRef = ref(
+        storage,
+        `posts/${parsedUploadData.postId}/${index}`,
+      )
       await uploadBytes(storageRef, file, {
         contentType: file.type,
         customMetadata: {
-          postId: uploadData.postId,
+          postId: parsedUploadData.postId,
           name: file.name,
           size: file.size.toString(),
         },
@@ -53,14 +69,14 @@ export async function newPost(
     }
     await db.post.create({
       data: {
-        id: uploadData.postId,
-        description: uploadData.description,
-        title: uploadData.title,
-        numberOfImages: uploadData.imageFiles.length,
+        id: parsedUploadData.postId,
+        description: parsedUploadData.description,
+        title: parsedUploadData.title,
+        numberOfImages: parsedUploadData.imageFiles.length,
         authorId: currentUser.userId,
       },
     })
-    return { message: uploadData.postId, status: 200 }
+    return { message: parsedUploadData.postId, status: 200 }
   } catch (error) {
     console.warn(error)
     return { message: 'Server Error', status: 503 }
