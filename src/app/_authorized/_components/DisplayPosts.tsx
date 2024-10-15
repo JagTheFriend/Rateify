@@ -1,6 +1,8 @@
 'use client'
 
 import type { Post } from '@prisma/client'
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
 import { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import DisplayCounters from '~/components/DisplayCounters'
@@ -9,13 +11,18 @@ import UserProfile from '~/components/UserProfile'
 import type { CustomPostType } from '~/lib/types'
 import { getListOfPosts } from '~/server/post-actions'
 
+dayjs.extend(relativeTime)
+
 function Post({ post }: { post: CustomPostType }) {
   return (
     <div className="mt-2">
       <UserProfile userData={post.authorData} />
       <ImageCarousel imageUrls={post.imageUrls} />
       <section className="my-2">
-        <p className="text-lg">{post.title}</p>
+        <div className="flex flex-row gap-2 items-center">
+          <p className="text-lg">{post.title}</p>
+          <p className="font-thin">{` · ${dayjs(post.createdAt).fromNow()}`}</p>
+        </div>
         <p className="text-base">{post.description}</p>
       </section>
       <DisplayCounters
