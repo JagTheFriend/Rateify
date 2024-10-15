@@ -194,12 +194,25 @@ export async function likeOrDislikePost(
   }
 }
 
+const GetListOfPostsSchema = z.object({
+  cursorId: z.string().optional(),
+  search: z.string(),
+  authorId: z.string(),
+})
+
 export async function getListOfPosts(
   cursorId?: string,
   search = '',
   authorId = '',
 ) {
   try {
+    GetListOfPostsSchema.parse({
+      cursorId,
+      search,
+      authorId,
+    })
+    checkAuthentication()
+
     var posts
 
     if (!cursorId) {
