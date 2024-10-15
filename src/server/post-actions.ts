@@ -87,12 +87,11 @@ export async function getPostData(postId: string): Promise<{
   status: number
 }> {
   try {
-    checkAuthentication()
-
     GetPostDataSchema.parse({
       postId,
     })
 
+    checkAuthentication()
     const post = await db.post.findUnique({ where: { id: postId } })
 
     if (!post) {
@@ -116,12 +115,29 @@ export async function getPostData(postId: string): Promise<{
   }
 }
 
+const LikeOrDislikePostSchema = z.object({
+  type: z
+    .string()
+    .min(1)
+    .refine((value) => value == 'like' || value == 'dislike'),
+  postId: z.string().min(1),
+  decrement: z.boolean(),
+})
+
 export async function likeOrDislikePost(
   type: 'like' | 'dislike',
   postId: string,
   decrement = false,
 ): Promise<{ message: string; status: number }> {
   try {
+    LikeOrDislikePostSchema.parse({
+      type,
+      postId,
+      decrement,
+    })
+
+    checkAuthentication()
+
     if (type == 'like') {
       if (!decrement) {
         await db.post.update({
