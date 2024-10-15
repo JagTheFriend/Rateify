@@ -1,4 +1,4 @@
-import { type User, auth } from '@clerk/nextjs/server'
+import type { User } from '@clerk/nextjs/server'
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import type { CustomUserType } from './types'
@@ -32,13 +32,4 @@ export function formatNumber(number: number): string {
     notation: 'compact',
     compactDisplay: 'short',
   })
-}
-
-export function checkAuthentication() {
-  const currentUser = auth()
-
-  if (!currentUser?.userId) {
-    throw new Error('Unauthenticated')
-  }
-  return currentUser
 }
