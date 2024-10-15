@@ -1,21 +1,28 @@
 'use server'
 
-import { auth, clerkClient } from '@clerk/nextjs/server'
+import { clerkClient } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
-import type { CustomUserType } from '~/lib/types'
-import { getUserDetail } from '~/lib/utils'
+import { z } from 'zod'
+import { type CustomUserType, SERVER_ERROR_MESSAGE } from '~/lib/types'
+import { checkAuthentication, getUserDetail } from '~/lib/utils'
 import { db } from './db'
+
+const PostCommentSchema = z.object({
+  postId: z.string().min(1),
+  comment: z.string().min(1),
+})
 
 export async function postComment(formData: FormData) {
   const postId = formData.get('postId') as string
   const comment = formData.get('commentContent') as string
-  const { userId: authorId } = auth()
-
-  if (!authorId) {
-    return { message: 'Unauthenticated', status: 401 }
-  }
 
   try {
+    PostCommentSchema.parse({
+      postId,
+      comment,
+    })
+    const { userId: authorId } = checkAuthentication()
+
     await db.post.update({
       where: {
         id: postId,
@@ -35,10 +42,7 @@ export async function postComment(formData: FormData) {
     revalidatePath(`/view/${postId}`)
     return { message: 'Comment Created', status: 200 }
   } catch (error) {
-    return {
-      message: 'Server Error Occurred. Try again after sometime',
-      status: 503,
-    }
+    return SERVER_ERROR_MESSAGE
   }
 }
 
@@ -83,11 +87,22 @@ export async function likeOrDislikeComment(
   }
 }
 
+const GetCommentsOfPostSchema = z.object({
+  postId: z.string().min(1),
+  currentUser: z.string().optional(),
+})
+
 export async function getCommentsOfPost(
   postId: string,
   currentCursor?: string,
 ) {
   try {
+    GetCommentsOfPostSchema.parse({
+      postId,
+      currentCursor,
+    })
+    checkAuthentication()
+
     let comments
     if (currentCursor) {
       comments = await db.comment.findMany({
@@ -136,9 +151,6 @@ export async function getCommentsOfPost(
 
     return { status: 200, message: finalData }
   } catch (error) {
-    return {
-      message: 'Server Error Occurred. Try again after sometime',
-      status: 503,
-    }
+    return SERVER_ERROR_MESSAGE
   }
 }
