@@ -5,10 +5,11 @@ import { getStorage, ref, uploadBytes } from 'firebase/storage'
 import { revalidatePath } from 'next/cache'
 import { v4 as uuidv4 } from 'uuid'
 import { z } from 'zod'
-import type {
-  CustomPostType,
-  CustomUserType,
-  ReturnTypeOfPost,
+import {
+  type CustomPostType,
+  type CustomUserType,
+  type ReturnTypeOfPost,
+  SERVER_ERROR_MESSAGE,
 } from '~/lib/types'
 import { checkAuthentication, getUserDetail } from '~/lib/utils'
 import { db, firebaseApp } from './db'
@@ -22,7 +23,7 @@ const NewPostSchema = z.object({
 
 export async function newPost(
   formData: FormData,
-): Promise<{ message: string; status: 401 | 200 | 503 | 507 }> {
+): Promise<{ message: string; status: number }> {
   const uploadData = {
     postId: uuidv4(),
     title: formData.get('post-title') as string,
@@ -73,34 +74,45 @@ export async function newPost(
     })
     return { message: parsedUploadData.postId, status: 200 }
   } catch (error) {
-    console.warn(error)
-    return { message: 'Server Error', status: 503 }
+    return SERVER_ERROR_MESSAGE
   }
 }
 
-const GetPostDataSchema = z
+const GetPostDataSchema = z.object({
+  postId: z.string().min(1),
+})
 
 export async function getPostData(postId: string): Promise<{
-  message: ReturnTypeOfPost
-  status: 404 | 200 | 401
+  message: ReturnTypeOfPost | string
+  status: number
 }> {
-  const post = await db.post.findUnique({ where: { id: postId } })
+  try {
+    checkAuthentication()
 
-  if (!post) {
-    return { message: {} as ReturnTypeOfPost, status: 404 }
-  }
+    GetPostDataSchema.parse({
+      postId,
+    })
 
-  const returnData: ReturnTypeOfPost = { ...post, imageUrls: [] }
+    const post = await db.post.findUnique({ where: { id: postId } })
 
-  // Create a reference with an initial file path and name
-  for (let index = 0; index < post.numberOfImages; index++) {
-    const imageUrl = `https://firebasestorage.googleapis.com/v0/b/rateify-17fc8.appspot.com/o/posts%2F${postId}%2F${index}?alt=media`
-    returnData.imageUrls.push(imageUrl)
-  }
+    if (!post) {
+      return { message: {} as ReturnTypeOfPost, status: 404 }
+    }
 
-  return {
-    message: returnData,
-    status: 200,
+    const returnData: ReturnTypeOfPost = { ...post, imageUrls: [] }
+
+    // Create a reference with an initial file path and name
+    for (let index = 0; index < post.numberOfImages; index++) {
+      const imageUrl = `https://firebasestorage.googleapis.com/v0/b/rateify-17fc8.appspot.com/o/posts%2F${postId}%2F${index}?alt=media`
+      returnData.imageUrls.push(imageUrl)
+    }
+
+    return {
+      message: returnData,
+      status: 200,
+    }
+  } catch (error) {
+    return SERVER_ERROR_MESSAGE
   }
 }
 
@@ -108,7 +120,7 @@ export async function likeOrDislikePost(
   type: 'like' | 'dislike',
   postId: string,
   decrement = false,
-): Promise<{ message: string; status: 404 | 200 | 503 }> {
+): Promise<{ message: string; status: number }> {
   try {
     if (type == 'like') {
       if (!decrement) {
@@ -162,7 +174,7 @@ export async function likeOrDislikePost(
     revalidatePath(`/view/${postId}`)
     return { message: 'Success', status: 200 }
   } catch (error) {
-    return { message: 'Server Error', status: 503 }
+    return SERVER_ERROR_MESSAGE
   }
 }
 
@@ -257,9 +269,6 @@ export async function getListOfPosts(
     }))
     return { status: 200, message: finalData }
   } catch (error) {
-    return {
-      message: 'Server Error Occurred. Try again after sometime',
-      status: 503,
-    }
+    return SERVER_ERROR_MESSAGE
   }
 }
