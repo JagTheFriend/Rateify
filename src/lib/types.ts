@@ -15,3 +15,5 @@ export type CustomPostType = Post & {
   authorData: CustomUserType
   imageUrls: string[]
 }
+
+export const SERVER_ERROR_MESSAGE = { message: 'Server Error', status: 503 }
