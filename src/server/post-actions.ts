@@ -1,6 +1,6 @@
 'use server'
 
-import { auth, clerkClient } from '@clerk/nextjs/server'
+import { clerkClient } from '@clerk/nextjs/server'
 import { getStorage, ref, uploadBytes } from 'firebase/storage'
 import { revalidatePath } from 'next/cache'
 import { v4 as uuidv4 } from 'uuid'
@@ -10,7 +10,7 @@ import type {
   CustomUserType,
   ReturnTypeOfPost,
 } from '~/lib/types'
-import { getUserDetail } from '~/lib/utils'
+import { checkAuthentication, getUserDetail } from '~/lib/utils'
 import { db, firebaseApp } from './db'
 
 const NewPostSchema = z.object({
@@ -23,12 +23,6 @@ const NewPostSchema = z.object({
 export async function newPost(
   formData: FormData,
 ): Promise<{ message: string; status: 401 | 200 | 503 | 507 }> {
-  const currentUser = auth()
-
-  if (!currentUser?.userId) {
-    return { message: 'Unauthenticated', status: 401 }
-  }
-
   const uploadData = {
     postId: uuidv4(),
     title: formData.get('post-title') as string,
@@ -37,6 +31,7 @@ export async function newPost(
   }
 
   try {
+    const currentUser = checkAuthentication()
     const parsedUploadData = NewPostSchema.parse(uploadData)
 
     if (
@@ -83,9 +78,11 @@ export async function newPost(
   }
 }
 
+const GetPostDataSchema = z
+
 export async function getPostData(postId: string): Promise<{
   message: ReturnTypeOfPost
-  status: 404 | 200
+  status: 404 | 200 | 401
 }> {
   const post = await db.post.findUnique({ where: { id: postId } })
 
