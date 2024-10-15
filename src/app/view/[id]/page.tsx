@@ -2,7 +2,7 @@
 
 import type { Comment } from '@prisma/client'
 import { notFound } from 'next/navigation'
-import type { CustomUserType } from '~/lib/types'
+import type { CustomUserType, ReturnTypeOfPost } from '~/lib/types'
 import { getCommentsOfPost } from '~/server/comment-actions'
 import { getUserById } from '~/server/general-actions'
 import { getPostData } from '~/server/post-actions'
@@ -18,17 +18,22 @@ type Props = {
 
 export default async function ViewPostContent({ params }: Props) {
   const { id: postId } = params
-  const { status: postStatus, message: postData } = await getPostData(postId)
+  const { status: postStatus, message: messagePostData } =
+    await getPostData(postId)
   if (postStatus === 404) {
     return notFound()
   }
 
-  const { status: authorStatus, message: authorData } = await getUserById(
+  const postData = messagePostData as ReturnTypeOfPost
+
+  const { status: authorStatus, message: messageUserData } = await getUserById(
     postData.authorId,
   )
   if (authorStatus === 404) {
     return notFound()
   }
+
+  const authorData = messageUserData as CustomUserType
 
   const { message: commentData } = await getCommentsOfPost(postId)
 
