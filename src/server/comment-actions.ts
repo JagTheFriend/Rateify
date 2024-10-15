@@ -46,12 +46,23 @@ export async function postComment(formData: FormData) {
   }
 }
 
+const LikeOrDislikeCommentSchema = z.object({
+  commentId: z.string().min(1),
+  decrement: z.boolean(),
+})
+
 export async function likeOrDislikeComment(
   commentId: string,
   decrement = false,
 ) {
   var postId
   try {
+    LikeOrDislikeCommentSchema.parse({
+      commentId,
+      decrement,
+    })
+    checkAuthentication()
+
     if (!decrement) {
       const postData = await db.comment.update({
         where: {
@@ -80,10 +91,7 @@ export async function likeOrDislikeComment(
     revalidatePath(`/view/${postId}`)
     return { message: 'Success', status: 200 }
   } catch (error) {
-    return {
-      message: 'Server Error Occurred. Try again after sometime',
-      status: 503,
-    }
+    return SERVER_ERROR_MESSAGE
   }
 }
 
